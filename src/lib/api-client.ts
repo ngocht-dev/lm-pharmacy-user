@@ -1,9 +1,11 @@
-import { API_BASE_URL } from './api-config';
-import type { ApiResponse } from '@/types/api';
+import { API_BASE_URL, API_ENDPOINTS } from './api-config';
+import type { ApiResponse, LoginResponse } from '@/types/api';
 
 class ApiClient {
   private baseURL: string;
   private accessToken: string | null = null;
+  private isRefreshing: boolean = false;
+  private refreshPromise: Promise<boolean> | null = null;
 
   constructor(baseURL: string = API_BASE_URL) {
     this.baseURL = baseURL;
@@ -31,9 +33,72 @@ class ApiClient {
     }
   }
 
+  private async refreshAccessToken(): Promise<boolean> {
+    if (this.isRefreshing) {
+      // If already refreshing, wait for the current refresh to complete
+      return this.refreshPromise || Promise.resolve(false);
+    }
+
+    this.isRefreshing = true;
+    this.refreshPromise = this.performTokenRefresh();
+    
+    try {
+      const result = await this.refreshPromise;
+      return result;
+    } finally {
+      this.isRefreshing = false;
+      this.refreshPromise = null;
+    }
+  }
+
+  private async performTokenRefresh(): Promise<boolean> {
+    const refreshToken = typeof window !== 'undefined' 
+      ? localStorage.getItem('refresh_token') 
+      : null;
+    
+    if (!refreshToken) {
+      console.log('No refresh token available');
+      return false;
+    }
+
+    try {
+      const response = await fetch(`${this.baseURL}${API_ENDPOINTS.REFRESH}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          refresh_token: refreshToken,
+        }),
+      });
+
+      if (!response.ok) {
+        console.log('Refresh token request failed:', response.status);
+        return false;
+      }
+
+      const data: LoginResponse = await response.json();
+      
+      if (data.access_token) {
+        this.setAccessToken(data.access_token);
+        if (data.refresh_token && typeof window !== 'undefined') {
+          localStorage.setItem('refresh_token', data.refresh_token);
+        }
+        console.log('Token refreshed successfully');
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      return false;
+    }
+  }
+
   private async request<T = any>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    isRetry: boolean = false
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
     
@@ -63,11 +128,23 @@ class ApiClient {
 
       if (!response.ok) {
         // Handle 401 Unauthorized - token might be expired
-        if (response.status === 401) {
-          this.clearTokens();
-          // Redirect to login or trigger re-authentication
-          if (typeof window !== 'undefined') {
-            window.location.href = '/login';
+        if (response.status === 401 && !isRetry) {
+          console.log('Received 401, attempting token refresh...');
+          
+          // Try to refresh the token
+          const refreshSuccess = await this.refreshAccessToken();
+          
+          if (refreshSuccess) {
+            // Retry the original request with the new token
+            console.log('Token refresh successful, retrying original request...');
+            return this.request<T>(endpoint, options, true);
+          } else {
+            // Refresh failed, clear tokens and redirect to login
+            console.log('Token refresh failed, redirecting to login...');
+            this.clearTokens();
+            if (typeof window !== 'undefined') {
+              window.location.href = '/login';
+            }
           }
         }
 
@@ -135,7 +212,7 @@ class ApiClient {
   }
 
   // File upload method
-  async uploadFile<T = any>(endpoint: string, formData: FormData): Promise<ApiResponse<T>> {
+  async uploadFile<T = any>(endpoint: string, formData: FormData, isRetry: boolean = false): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
     
     const headers: Record<string, string> = {};
@@ -153,10 +230,23 @@ class ApiClient {
       const data = await response.json();
 
       if (!response.ok) {
-        if (response.status === 401) {
-          this.clearTokens();
-          if (typeof window !== 'undefined') {
-            window.location.href = '/login';
+        if (response.status === 401 && !isRetry) {
+          console.log('Received 401 in file upload, attempting token refresh...');
+          
+          // Try to refresh the token
+          const refreshSuccess = await this.refreshAccessToken();
+          
+          if (refreshSuccess) {
+            // Retry the original upload with the new token
+            console.log('Token refresh successful, retrying file upload...');
+            return this.uploadFile<T>(endpoint, formData, true);
+          } else {
+            // Refresh failed, clear tokens and redirect to login
+            console.log('Token refresh failed, redirecting to login...');
+            this.clearTokens();
+            if (typeof window !== 'undefined') {
+              window.location.href = '/login';
+            }
           }
         }
 

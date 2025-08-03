@@ -43,7 +43,7 @@ export const authService = {
     }
   },
 
-  // Refresh token
+  // Refresh token (now handled automatically by API client)
   async refreshToken(): Promise<ApiResponse<LoginResponse>> {
     const refreshToken = typeof window !== 'undefined' 
       ? localStorage.getItem('refresh_token') 
@@ -57,6 +57,8 @@ export const authService = {
       };
     }
 
+    // Note: This method is now primarily for manual refresh
+    // Automatic refresh is handled by the API client
     const response = await apiClient.post<LoginResponse>(API_ENDPOINTS.REFRESH, {
       refresh_token: refreshToken,
     });
@@ -65,8 +67,6 @@ export const authService = {
       apiClient.setAccessToken(response.data.access_token);
       if (typeof window !== 'undefined') {
         localStorage.setItem('refresh_token', response.data.refresh_token);
-        // Note: refresh endpoint also only returns tokens, not user data
-        // User data should be fetched separately if needed
       }
     }
 
