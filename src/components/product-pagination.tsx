@@ -13,6 +13,7 @@ interface ProductPaginationProps {
   totalPages: number;
   total?: number;
   onPageChange: (page: number) => void;
+  disabled?: boolean;
 }
 
 export function ProductPagination({
@@ -20,6 +21,7 @@ export function ProductPagination({
   totalPages,
   total,
   onPageChange,
+  disabled = false,
 }: ProductPaginationProps) {
   if (totalPages <= 1) return null;
 
@@ -80,13 +82,13 @@ export function ProductPagination({
 
       {/* Pagination Controls */}
       <Pagination>
-        <PaginationContent>
+        <PaginationContent className={disabled ? 'pointer-events-none opacity-50' : ''}>
           {/* Previous Button */}
           <PaginationItem>
             <PaginationPrevious
-              onClick={() => onPageChange(currentPage - 1)}
+              onClick={() => !disabled && onPageChange(currentPage - 1)}
               className={
-                currentPage === 1
+                currentPage === 1 || disabled
                   ? "pointer-events-none opacity-50"
                   : "cursor-pointer"
               }
@@ -102,9 +104,9 @@ export function ProductPagination({
                 <PaginationEllipsis />
               ) : (
                 <PaginationLink
-                  onClick={() => onPageChange(page)}
+                  onClick={() => !disabled && onPageChange(page)}
                   isActive={currentPage === page}
-                  className="cursor-pointer"
+                  className={disabled ? 'cursor-default' : 'cursor-pointer'}
                 >
                   {page}
                 </PaginationLink>
@@ -115,9 +117,9 @@ export function ProductPagination({
           {/* Next Button */}
           <PaginationItem>
             <PaginationNext
-              onClick={() => onPageChange(currentPage + 1)}
+              onClick={() => !disabled && onPageChange(currentPage + 1)}
               className={
-                currentPage === totalPages
+                currentPage === totalPages || disabled
                   ? "pointer-events-none opacity-50"
                   : "cursor-pointer"
               }

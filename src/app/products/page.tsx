@@ -15,6 +15,7 @@ export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
+    const [paginationLoading, setPaginationLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +30,8 @@ export default function ProductsPage() {
 
     // Load products when filters change
     useEffect(() => {
-        loadProducts();
+        const isPageChange = currentPage !== 1;
+        loadProducts(isPageChange);
     }, [searchQuery, selectedCategory, currentPage]);
 
     const loadCategories = async () => {
@@ -43,8 +45,13 @@ export default function ProductsPage() {
         }
     };
 
-    const loadProducts = async () => {
-        setLoading(true);
+    const loadProducts = async (isPageChange = false) => {
+        if (isPageChange) {
+            setPaginationLoading(true);
+        } else {
+            setLoading(true);
+        }
+        
         try {
             const params: ProductSearchParams = {
                 page: currentPage,
@@ -70,6 +77,7 @@ export default function ProductsPage() {
             console.error('Failed to load products:', error);
         } finally {
             setLoading(false);
+            setPaginationLoading(false);
         }
     };
 
@@ -86,6 +94,11 @@ export default function ProductsPage() {
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
+        // Scroll to top of products section smoothly
+        const productsSection = document.querySelector('.products-grid');
+        if (productsSection) {
+            productsSection.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     return (
@@ -124,32 +137,50 @@ export default function ProductsPage() {
 
                     {/* Products Grid */}
                     <div className="flex-1">
-                        {loading ? (
-                            <div className="flex items-center justify-center py-12">
-                                <Loader2 className="h-8 w-8 animate-spin" />
-                                <span className="ml-2">Đang tải sản phẩm...</span>
-                            </div>
-                        ) : products.length > 0 ? (
-                            <>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                    {products.map((product) => (
-                                        <ProductCard key={product.id} product={product} />
-                                    ))}
+                        <div className="products-grid">
+                            {loading ? (
+                                <div className="flex items-center justify-center py-12">
+                                    <Loader2 className="h-8 w-8 animate-spin" />
+                                    <span className="ml-2">Đang tải sản phẩm...</span>
                                 </div>
+                            ) : products.length > 0 ? (
+                                <>
+                                    {/* Products Grid with Loading Overlay */}
+                                    <div className="relative">
+                                        {paginationLoading && (
+                                            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex items-center justify-center">
+                                                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-lg">
+                                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                                    <span className="text-sm">Đang tải...</span>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <div 
+                                            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-h-[600px] ${
+                                                paginationLoading ? 'opacity-50' : ''
+                                            }`}
+                                        >
+                                            {products.map((product) => (
+                                                <ProductCard key={product.id} product={product} />
+                                            ))}
+                                        </div>
+                                    </div>
 
-                                {/* Pagination */}
-                                <ProductPagination
-                                    currentPage={currentPage}
-                                    totalPages={lastPage}
-                                    total={total}
-                                    onPageChange={handlePageChange}
-                                />
-                            </>
-                        ) : (
-                            <div className="text-center py-12">
-                                <p className="text-gray-500">Không tìm thấy sản phẩm nào.</p>
-                            </div>
-                        )}
+                                    {/* Pagination */}
+                                    <ProductPagination
+                                        currentPage={currentPage}
+                                        totalPages={lastPage}
+                                        total={total}
+                                        onPageChange={handlePageChange}
+                                        disabled={paginationLoading}
+                                    />
+                                </>
+                            ) : (
+                                <div className="text-center py-12 min-h-[400px] flex items-center justify-center">
+                                    <p className="text-gray-500">Không tìm thấy sản phẩm nào.</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
