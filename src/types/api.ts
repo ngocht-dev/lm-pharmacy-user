@@ -69,6 +69,7 @@ export interface Product {
   vendorId: string;
   barcode?: string;
   price: number;
+  sale_price: number;
   stockQuantity: number;
   minStockLevel: number;
   isActive: boolean;
@@ -156,4 +157,25 @@ export interface CartState {
   items: CartItem[];
   total: number;
   itemCount: number;
+}
+
+// Message types
+export interface CreateMessageDto {
+  full_name: string;
+  email: string;
+  phone_number?: string;
+  subject: string;
+  message: string;
+}
+
+export interface Message {
+  id: string;
+  full_name: string;
+  email: string;
+  phone_number?: string;
+  subject: string;
+  message: string;
+  status?: string;
+  createdAt: string;
+  updatedAt: string;
 }

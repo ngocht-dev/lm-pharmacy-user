@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/cart-context';
 import type { Product } from '@/types/api';
 import { ShoppingCart, Package } from 'lucide-react';
+import { formatVND } from '@/lib/utils/currency';
 
 interface ProductCardProps {
   product: Product;
@@ -52,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
         
         <div className="flex items-center justify-between mb-2">
           <span className="text-lg font-bold text-blue-600">
-            ${product.price.toFixed(2)}
+            {formatVND(product.sale_price)}
           </span>
           <Badge variant={product.stockQuantity > 0 ? 'default' : 'destructive'}>
             {product.stockQuantity > 0 ? 'Còn Hàng' : 'Hết Hàng'}

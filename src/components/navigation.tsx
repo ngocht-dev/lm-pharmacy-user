@@ -45,6 +45,9 @@ export function Navigation() {
             <Link href="/categories" className="text-gray-700 hover:text-blue-600 font-medium">
               Danh Mục
             </Link>
+            <Link href="/contact" className="text-gray-700 hover:text-blue-600 font-medium">
+              Liên Hệ
+            </Link>
             {isAuthenticated && (
               <Link href="/orders" className="text-gray-700 hover:text-blue-600 font-medium">
                 Đơn Hàng Của Tôi

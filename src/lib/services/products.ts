@@ -19,7 +19,7 @@ export const productService = {
     total: number;
     page: number;
     limit: number;
-    totalPages: number;
+    lastPage: number;
   }>> {
     return apiClient.get(API_ENDPOINTS.PRODUCTS_SEARCH, params);
   },

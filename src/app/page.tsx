@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Navigation } from '@/components/navigation';
-import { 
-  ShoppingBag, 
-  Clock, 
-  Shield, 
+import {
+  ShoppingBag,
+  Clock,
+  Shield,
   Truck,
   Star,
   ArrowRight
@@ -15,7 +15,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      
+
       {/* Hero Section */}
       <section className="bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -31,11 +31,6 @@ export default function HomePage() {
                 <Link href="/products">
                   Mua Sắm Ngay
                   <ShoppingBag className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600" asChild>
-                <Link href="/categories">
-                  Xem Danh Mục
                 </Link>
               </Button>
             </div>
@@ -125,8 +120,8 @@ export default function HomePage() {
             Tạo tài khoản ngay hôm nay và bắt đầu đặt mua thuốc trực tuyến
           </p>
           <Button size="lg" variant="secondary" asChild>
-            <Link href="/register">
-              Bắt Đầu
+            <Link href="/contact">
+              Liên Hệ Chúng Tôi
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>

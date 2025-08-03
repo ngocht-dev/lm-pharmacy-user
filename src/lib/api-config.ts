@@ -25,6 +25,9 @@ export const API_ENDPOINTS = {
   
   // Vendors
   VENDORS: '/vendors',
+  
+  // Messages
+  MESSAGES: '/messages',
 } as const;
 
 // HTTP methods

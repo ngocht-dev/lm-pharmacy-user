@@ -10,6 +10,7 @@ import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { formatVND } from '@/lib/utils/currency';
 
 export default function CartPage() {
   const { items, total, updateQuantity, removeItem, clearCart } = useCart();
@@ -111,7 +112,7 @@ export default function CartPage() {
                           {item.product.category.name}
                         </p>
                         <p className="text-sm font-medium text-blue-600">
-                          ${item.product.price.toFixed(2)}
+                          {formatVND(item.product.sale_price)}
                         </p>
                       </div>
 
@@ -149,7 +150,7 @@ export default function CartPage() {
                       {/* Item Total */}
                       <div className="text-right">
                         <p className="text-sm font-medium text-gray-900">
-                          ${(item.product.price * item.quantity).toFixed(2)}
+                          {formatVND(item.product.sale_price * item.quantity)}
                         </p>
                       </div>
 
@@ -178,16 +179,16 @@ export default function CartPage() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
                   <span>Tạm Tính</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{formatVND(total)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Thuế</span>
-                  <span>${(total * 0.1).toFixed(2)}</span>
+                  <span>{formatVND(total * 0.1)}</span>
                 </div>
                 <div className="border-t pt-4">
                   <div className="flex justify-between font-semibold">
                     <span>Tổng Cộng</span>
-                    <span>${(total * 1.1).toFixed(2)}</span>
+                    <span>{formatVND(total * 1.1)}</span>
                   </div>
                 </div>
 
