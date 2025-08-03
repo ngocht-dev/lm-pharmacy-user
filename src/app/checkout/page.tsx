@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navigation } from '@/components/navigation';
 import { Button } from '@/components/ui/button';
@@ -23,12 +23,12 @@ import { CheckCircle } from 'lucide-react';
 
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
 
-  const [customerName, setCustomerName] = useState(user?.firstName + ' ' + user?.lastName || '');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [customerAddress, setCustomerAddress] = useState('');
+  const [customerName, setCustomerName] = useState(user?.name || '');
+  const [customerPhone, setCustomerPhone] = useState(user?.phone_number || '');
+  const [customerAddress, setCustomerAddress] = useState(user?.address || '');
   const [customerType, setCustomerType] = useState<CustomerType>(CustomerType.INDIVIDUAL);
   const [saleMethod, setSaleMethod] = useState<SaleMethod>(SaleMethod.CASH);
   const [discount, setDiscount] = useState(0);
@@ -37,15 +37,39 @@ export default function CheckoutPage() {
   const [orderCreated, setOrderCreated] = useState(false);
   const [orderId, setOrderId] = useState('');
 
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
-    router.push('/login');
+  // Handle authentication redirect
+  useEffect(() => {
+    if (!isAuthLoading && !user) {
+      router.push('/login');
+    }
+  }, [isAuthLoading, user, router]);
+
+  // Handle empty cart redirect
+  useEffect(() => {
+    if (!isAuthLoading && user && items.length === 0) {
+      router.push('/cart');
+    }
+  }, [isAuthLoading, user, items.length, router]);
+
+  // Show loading while authentication is being checked
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Đang tải...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated
+  if (!user) {
     return null;
   }
 
-  // Redirect if cart is empty
+  // Don't render if cart is empty
   if (items.length === 0) {
-    router.push('/cart');
     return null;
   }
 

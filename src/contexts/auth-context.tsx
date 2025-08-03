@@ -20,10 +20,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Update isAuthenticated whenever user changes
-    useEffect(() => {
-        setIsAuthenticated(!!user);
-    }, [user]);
+    // Helper function to update user and auth state together
+    const updateUserState = (newUser: User | null) => {
+        setUser(newUser);
+        setIsAuthenticated(!!newUser);
+    };
 
     useEffect(() => {
         // Check if user is already logged in
@@ -40,22 +41,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     console.log('Me response:', response); // Debugging log
                     
                     if (response.success && response.data) {
-                        setUser(response.data);
+                        updateUserState(response.data);
                         console.log('User restored from server:', response.data); // Debugging log
                     } else {
                         console.log('Token invalid, clearing storage'); // Debugging log
                         // Token is invalid, clear storage
                         authService.logout();
-                        setUser(null);
+                        updateUserState(null);
                     }
                 } else {
                     console.log('No stored user or not authenticated'); // Debugging log
-                    setUser(null);
+                    updateUserState(null);
                 }
             } catch (error) {
                 console.error('Auth check failed:', error);
                 authService.logout();
-                setUser(null);
+                updateUserState(null);
             } finally {
                 setIsLoading(false);
             }
@@ -76,7 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 console.log('User data response:', userResponse); // Debugging log
                 
                 if (userResponse.success && userResponse.data) {
-                    setUser(userResponse.data);
+                    updateUserState(userResponse.data);
                     // Store user data in localStorage since login API doesn't return it
                     if (typeof window !== 'undefined') {
                         localStorage.setItem('user', JSON.stringify(userResponse.data));
@@ -88,35 +89,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     authService.logout();
                     return {
                         success: false,
-                        error: 'Failed to get user information'
+                        error: userResponse.error || 'Failed to get user data',
                     };
                 }
             } else {
                 return {
                     success: false,
-                    error: response.error || 'Login failed'
+                    error: response.error || 'Login failed',
                 };
             }
         } catch (error) {
+            console.error('Login failed:', error);
             return {
                 success: false,
-                error: error instanceof Error ? error.message : 'Login failed'
+                error: 'Network error occurred',
             };
         }
     };
 
     const logout = () => {
         authService.logout();
-        setUser(null);
-        setIsAuthenticated(false);
+        updateUserState(null);
     };
 
-    const updateUser = (updatedUser: User) => {
-        setUser(updatedUser);
+    const updateUser = (newUser: User) => {
+        updateUserState(newUser);
         if (typeof window !== 'undefined') {
-            localStorage.setItem('user', JSON.stringify(updatedUser));
+            localStorage.setItem('user', JSON.stringify(newUser));
         }
-        // isAuthenticated will be updated automatically via useEffect
     };
 
     return (

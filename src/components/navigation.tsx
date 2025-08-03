@@ -79,8 +79,8 @@ export function Navigation() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <div className="px-2 py-1.5">
-                    <p className="text-sm font-medium">{user?.firstName} {user?.lastName}</p>
-                    <p className="text-xs text-gray-500">{user?.email}</p>
+                    <p className="text-sm font-medium">{user?.name || user?.username}</p>
+                    <p className="text-xs text-gray-500">@{user?.username}</p>
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>

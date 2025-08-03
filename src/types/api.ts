@@ -9,11 +9,14 @@ export interface ApiResponse<T = any> {
 // User types
 export interface User {
   id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
+  username: string;
   role: string;
-  isActive: boolean;
+  code?: string;
+  name?: string;
+  address?: string;
+  delivery_area?: string;
+  phone_number?: string;
+  is_active: boolean;
   createdAt: string;
   updatedAt: string;
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navigation } from '@/components/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,7 +13,7 @@ import { Eye, EyeOff, CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
   const [currentPassword, setCurrentPassword] = useState('');
@@ -22,13 +22,32 @@ export default function ProfilePage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
-    router.push('/login');
+  // Handle authentication redirect
+  useEffect(() => {
+    // Only redirect if loading is complete AND we have no user data
+    if (!isLoading && !user) {
+      router.push('/login');
+    }
+  }, [isLoading, user, router]);
+
+  // Show loading while authentication is being checked
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Đang tải...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render content if not authenticated
+  if (!isLoading && !user) {
     return null;
   }
 
@@ -48,7 +67,7 @@ export default function ProfilePage() {
       return;
     }
 
-    setIsLoading(true);
+    setIsChangingPassword(true);
 
     try {
       const response = await authService.changePassword({
@@ -68,7 +87,7 @@ export default function ProfilePage() {
       console.error('Password change failed:', error);
       setError('Đã xảy ra lỗi không mong muốn');
     } finally {
-      setIsLoading(false);
+      setIsChangingPassword(false);
     }
   };
 
@@ -88,21 +107,21 @@ export default function ProfilePage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label>Họ</Label>
-                  <Input value={user?.firstName || ''} disabled />
+                  <Label>Tên Đăng Nhập</Label>
+                  <Input value={user?.username || ''} disabled />
                 </div>
                 <div>
-                  <Label>Tên</Label>
-                  <Input value={user?.lastName || ''} disabled />
+                  <Label>Họ Và Tên</Label>
+                  <Input value={user?.name || ''} disabled />
                 </div>
               </div>
               <div>
-                <Label>Địa Chỉ Email</Label>
-                <Input value={user?.email || ''} disabled />
+                <Label>Số Điện Thoại</Label>
+                <Input value={user?.phone_number || ''} disabled />
               </div>
               <div>
-                <Label>Vai Trò</Label>
-                <Input value={user?.role || ''} disabled />
+                <Label>Địa Chỉ</Label>
+                <Input value={user?.address || ''} disabled />
               </div>
               <p className="text-sm text-gray-600">
                 Liên hệ quản trị viên để cập nhật thông tin cá nhân.
@@ -214,10 +233,10 @@ export default function ProfilePage() {
 
                 <Button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isChangingPassword}
                   className="w-full"
                 >
-                  {isLoading ? 'Đang Đổi Mật Khẩu...' : 'Đổi Mật Khẩu'}
+                  {isChangingPassword ? 'Đang Đổi Mật Khẩu...' : 'Đổi Mật Khẩu'}
                 </Button>
               </form>
             </CardContent>
