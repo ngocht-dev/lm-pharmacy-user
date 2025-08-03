@@ -70,7 +70,7 @@ export interface Product {
   barcode?: string;
   price: number;
   sale_price: number;
-  stockQuantity: number;
+  inventory_amount: number;
   minStockLevel: number;
   isActive: boolean;
   imageUrl?: string;
@@ -134,16 +134,10 @@ export interface Order {
 }
 
 export interface CreateOrderDto {
-  customerType: CustomerType;
-  customerName?: string;
-  customerPhone?: string;
-  customerAddress?: string;
-  saleMethod: SaleMethod;
-  discount?: number;
   items: {
-    productId: string;
+    product_id: number; // Changed from productId string to product_id number
     quantity: number;
-    unitPrice: number;
+    unit_price: number; // Changed from unitPrice to unit_price
   }[];
 }
 

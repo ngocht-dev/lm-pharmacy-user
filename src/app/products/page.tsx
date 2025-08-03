@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Navigation } from '@/components/navigation';
 import { ProductCard } from '@/components/product-card';
 import { ProductFilters } from '@/components/product-filters';
@@ -22,18 +22,6 @@ export default function ProductsPage() {
     const [lastPage, setTotalPages] = useState(1);
     const [total, setTotal] = useState(0);
 
-    // Load initial data
-    useEffect(() => {
-        loadCategories();
-        loadProducts();
-    }, []);
-
-    // Load products when filters change
-    useEffect(() => {
-        const isPageChange = currentPage !== 1;
-        loadProducts(isPageChange);
-    }, [searchQuery, selectedCategory, currentPage]);
-
     const loadCategories = async () => {
         try {
             const response = await productService.getCategories();
@@ -45,7 +33,7 @@ export default function ProductsPage() {
         }
     };
 
-    const loadProducts = async (isPageChange = false) => {
+    const loadProducts = useCallback(async (isPageChange = false) => {
         if (isPageChange) {
             setPaginationLoading(true);
         } else {
@@ -79,12 +67,23 @@ export default function ProductsPage() {
             setLoading(false);
             setPaginationLoading(false);
         }
-    };
+    }, [currentPage, searchQuery, selectedCategory]); // Dependencies that should trigger reload
+
+    // Load initial data
+    useEffect(() => {
+        loadCategories();
+    }, []); // Only run once on mount
+
+    // Load products when filters change
+    useEffect(() => {
+        const isPageChange = currentPage > 1;
+        loadProducts(isPageChange);
+    }, [loadProducts]); // Now loadProducts is memoized, so this won't cause infinite loops
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         setCurrentPage(1);
-        loadProducts();
+        // loadProducts will be called automatically by useEffect when currentPage changes
     };
 
     const handleCategoryChange = (categoryId: string) => {

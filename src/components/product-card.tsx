@@ -55,14 +55,14 @@ export function ProductCard({ product }: ProductCardProps) {
           <span className="text-lg font-bold text-blue-600">
             {formatVND(product.sale_price)}
           </span>
-          <Badge variant={product.stockQuantity > 0 ? 'default' : 'destructive'}>
-            {product.stockQuantity > 0 ? 'Còn Hàng' : 'Hết Hàng'}
+          <Badge variant={product.inventory_amount > 0 ? 'default' : 'destructive'}>
+            {product.inventory_amount > 0 ? 'Còn Hàng' : 'Hết Hàng'}
           </Badge>
         </div>
 
-        {product.stockQuantity > 0 && product.stockQuantity <= product.minStockLevel && (
+        {product.inventory_amount > 0 && product.inventory_amount <= product.minStockLevel && (
           <p className="text-xs text-amber-600">
-            Chỉ còn {product.stockQuantity} sản phẩm
+            Chỉ còn {product.inventory_amount} sản phẩm
           </p>
         )}
       </CardContent>
@@ -70,7 +70,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <CardFooter className="pt-0">
         <Button
           onClick={handleAddToCart}
-          disabled={product.stockQuantity === 0}
+          disabled={product.inventory_amount === 0}
           className="w-full"
           size="sm"
         >

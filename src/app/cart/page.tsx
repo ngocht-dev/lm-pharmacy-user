@@ -182,13 +182,13 @@ export default function CartPage() {
                   <span>{formatVND(total)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Thuế</span>
-                  <span>{formatVND(total * 0.1)}</span>
+                  <span>Phí Vận Chuyển</span>
+                  <span>--</span>
                 </div>
                 <div className="border-t pt-4">
                   <div className="flex justify-between font-semibold">
                     <span>Tổng Cộng</span>
-                    <span>{formatVND(total * 1.1)}</span>
+                    <span>{formatVND(total)}</span>
                   </div>
                 </div>
 
