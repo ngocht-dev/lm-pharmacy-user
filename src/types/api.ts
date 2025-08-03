@@ -20,14 +20,14 @@ export interface User {
 
 // Auth types
 export interface LoginDto {
-  email: string;
+  email?: string;
+  username?: string;
   password: string;
 }
 
 export interface LoginResponse {
   access_token: string;
   refresh_token: string;
-  user: User;
 }
 
 export interface ChangePasswordDto {

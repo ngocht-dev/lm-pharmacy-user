@@ -14,11 +14,11 @@ export const authService = {
     const response = await apiClient.post<LoginResponse>(API_ENDPOINTS.LOGIN, credentials);
     
     if (response.success && response.data) {
-      // Store tokens
+      // Store tokens only (since login API doesn't return user data)
       apiClient.setAccessToken(response.data.access_token);
       if (typeof window !== 'undefined') {
         localStorage.setItem('refresh_token', response.data.refresh_token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        console.log('Stored tokens after login'); // Debugging log
       }
     }
     
@@ -65,7 +65,8 @@ export const authService = {
       apiClient.setAccessToken(response.data.access_token);
       if (typeof window !== 'undefined') {
         localStorage.setItem('refresh_token', response.data.refresh_token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        // Note: refresh endpoint also only returns tokens, not user data
+        // User data should be fetched separately if needed
       }
     }
 
@@ -77,11 +78,15 @@ export const authService = {
     if (typeof window === 'undefined') return null;
     
     const userStr = localStorage.getItem('user');
+    console.log('Raw user string from localStorage:', userStr); // Debugging log
     if (!userStr) return null;
     
     try {
-      return JSON.parse(userStr);
-    } catch {
+      const user = JSON.parse(userStr);
+      console.log('Parsed user from localStorage:', user); // Debugging log
+      return user;
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error); // Debugging log
       return null;
     }
   },
@@ -93,6 +98,7 @@ export const authService = {
     const token = localStorage.getItem('access_token');
     const user = this.getStoredUser();
     
+    console.log('Auth check - Token:', !!token, 'User:', !!user); // Debugging log
     return !!(token && user);
   },
 };

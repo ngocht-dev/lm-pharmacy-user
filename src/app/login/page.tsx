@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { Heart, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -27,7 +27,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await login(email, password);
+      const result = await login(username, password);
       
       if (result.success) {
         router.push('/');
@@ -58,7 +58,7 @@ export default function LoginPage() {
           <CardHeader>
             <CardTitle>Sign in to your account</CardTitle>
             <CardDescription>
-              Enter your email and password to access your account
+              Enter your username and password to access your account
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -70,15 +70,15 @@ export default function LoginPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email address</Label>
+                <Label htmlFor="username">Username</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
+                  id="username"
+                  type="text"
+                  autoComplete="username"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your username"
                 />
               </div>
 
