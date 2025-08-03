@@ -55,13 +55,13 @@ export function ProductCard({ product }: ProductCardProps) {
             ${product.price.toFixed(2)}
           </span>
           <Badge variant={product.stockQuantity > 0 ? 'default' : 'destructive'}>
-            {product.stockQuantity > 0 ? 'In Stock' : 'Out of Stock'}
+            {product.stockQuantity > 0 ? 'Còn Hàng' : 'Hết Hàng'}
           </Badge>
         </div>
 
         {product.stockQuantity > 0 && product.stockQuantity <= product.minStockLevel && (
           <p className="text-xs text-amber-600">
-            Only {product.stockQuantity} left in stock
+            Chỉ còn {product.stockQuantity} sản phẩm
           </p>
         )}
       </CardContent>
@@ -74,7 +74,7 @@ export function ProductCard({ product }: ProductCardProps) {
           size="sm"
         >
           <ShoppingCart className="h-4 w-4 mr-2" />
-          {cartQuantity > 0 ? `In Cart (${cartQuantity})` : 'Add to Cart'}
+          {cartQuantity > 0 ? `Trong Giỏ (${cartQuantity})` : 'Thêm Vào Giỏ'}
         </Button>
       </CardFooter>
     </Card>

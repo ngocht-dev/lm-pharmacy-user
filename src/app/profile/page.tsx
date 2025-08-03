@@ -39,12 +39,12 @@ export default function ProfilePage() {
 
     // Validation
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match');
+      setError('Mật khẩu mới không khớp');
       return;
     }
 
     if (newPassword.length < 6) {
-      setError('New password must be at least 6 characters long');
+      setError('Mật khẩu mới phải có ít nhất 6 ký tự');
       return;
     }
 
@@ -62,11 +62,11 @@ export default function ProfilePage() {
         setNewPassword('');
         setConfirmPassword('');
       } else {
-        setError(response.error || 'Failed to change password');
+        setError(response.error || 'Không thể đổi mật khẩu');
       }
     } catch (error) {
       console.error('Password change failed:', error);
-      setError('An unexpected error occurred');
+      setError('Đã xảy ra lỗi không mong muốn');
     } finally {
       setIsLoading(false);
     }
@@ -77,35 +77,35 @@ export default function ProfilePage() {
       <Navigation />
       
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Profile Settings</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-8">Cài Đặt Hồ Sơ</h1>
 
         <div className="space-y-6">
           {/* User Information */}
           <Card>
             <CardHeader>
-              <CardTitle>Personal Information</CardTitle>
+              <CardTitle>Thông Tin Cá Nhân</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label>First Name</Label>
+                  <Label>Họ</Label>
                   <Input value={user?.firstName || ''} disabled />
                 </div>
                 <div>
-                  <Label>Last Name</Label>
+                  <Label>Tên</Label>
                   <Input value={user?.lastName || ''} disabled />
                 </div>
               </div>
               <div>
-                <Label>Email Address</Label>
+                <Label>Địa Chỉ Email</Label>
                 <Input value={user?.email || ''} disabled />
               </div>
               <div>
-                <Label>Role</Label>
+                <Label>Vai Trò</Label>
                 <Input value={user?.role || ''} disabled />
               </div>
               <p className="text-sm text-gray-600">
-                Contact your administrator to update personal information.
+                Liên hệ quản trị viên để cập nhật thông tin cá nhân.
               </p>
             </CardContent>
           </Card>
@@ -113,7 +113,7 @@ export default function ProfilePage() {
           {/* Change Password */}
           <Card>
             <CardHeader>
-              <CardTitle>Change Password</CardTitle>
+              <CardTitle>Đổi Mật Khẩu</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleChangePassword} className="space-y-4">
@@ -127,13 +127,13 @@ export default function ProfilePage() {
                   <Alert className="bg-green-50 text-green-700 border-green-200">
                     <CheckCircle className="h-4 w-4" />
                     <AlertDescription>
-                      Password changed successfully!
+                      Đổi mật khẩu thành công!
                     </AlertDescription>
                   </Alert>
                 )}
 
                 <div>
-                  <Label htmlFor="currentPassword">Current Password</Label>
+                  <Label htmlFor="currentPassword">Mật Khẩu Hiện Tại</Label>
                   <div className="relative">
                     <Input
                       id="currentPassword"
@@ -159,7 +159,7 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="newPassword">New Password</Label>
+                  <Label htmlFor="newPassword">Mật Khẩu Mới</Label>
                   <div className="relative">
                     <Input
                       id="newPassword"
@@ -186,7 +186,7 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                  <Label htmlFor="confirmPassword">Xác Nhận Mật Khẩu Mới</Label>
                   <div className="relative">
                     <Input
                       id="confirmPassword"
@@ -217,7 +217,7 @@ export default function ProfilePage() {
                   disabled={isLoading}
                   className="w-full"
                 >
-                  {isLoading ? 'Changing Password...' : 'Change Password'}
+                  {isLoading ? 'Đang Đổi Mật Khẩu...' : 'Đổi Mật Khẩu'}
                 </Button>
               </form>
             </CardContent>

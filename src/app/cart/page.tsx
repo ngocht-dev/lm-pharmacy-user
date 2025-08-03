@@ -39,13 +39,13 @@ export default function CartPage() {
             <CardContent className="py-16">
               <ShoppingBag className="mx-auto h-12 w-12 text-gray-400 mb-4" />
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Your cart is empty
+                Giỏ hàng của bạn đang trống
               </h2>
               <p className="text-gray-600 mb-6">
-                Add some products to your cart to get started
+                Thêm một số sản phẩm vào giỏ hàng để bắt đầu
               </p>
               <Button asChild>
-                <Link href="/products">Continue Shopping</Link>
+                <Link href="/products">Tiếp Tục Mua Sắm</Link>
               </Button>
             </CardContent>
           </Card>
@@ -59,7 +59,7 @@ export default function CartPage() {
       <Navigation />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-8">Giỏ Hàng</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
@@ -67,14 +67,14 @@ export default function CartPage() {
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Cart Items ({items.length})</CardTitle>
+                  <CardTitle>Sản Phẩm Trong Giỏ ({items.length})</CardTitle>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={clearCart}
                     className="text-red-600 hover:text-red-700"
                   >
-                    Clear Cart
+                    Xóa Giỏ Hàng
                   </Button>
                 </div>
               </CardHeader>
@@ -173,30 +173,30 @@ export default function CartPage() {
           <div className="lg:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle>Order Summary</CardTitle>
+                <CardTitle>Tóm Tắt Đơn Hàng</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span>Subtotal</span>
+                  <span>Tạm Tính</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Tax</span>
+                  <span>Thuế</span>
                   <span>${(total * 0.1).toFixed(2)}</span>
                 </div>
                 <div className="border-t pt-4">
                   <div className="flex justify-between font-semibold">
-                    <span>Total</span>
+                    <span>Tổng Cộng</span>
                     <span>${(total * 1.1).toFixed(2)}</span>
                   </div>
                 </div>
 
                 <div className="space-y-3 pt-4">
                   <Button onClick={handleCheckout} className="w-full">
-                    {isAuthenticated ? 'Proceed to Checkout' : 'Login to Checkout'}
+                    {isAuthenticated ? 'Tiến Hành Thanh Toán' : 'Đăng Nhập Để Thanh Toán'}
                   </Button>
                   <Button variant="outline" className="w-full" asChild>
-                    <Link href="/products">Continue Shopping</Link>
+                    <Link href="/products">Tiếp Tục Mua Sắm</Link>
                   </Button>
                 </div>
               </CardContent>

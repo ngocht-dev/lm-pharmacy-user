@@ -40,14 +40,14 @@ export function Navigation() {
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/products" className="text-gray-700 hover:text-blue-600 font-medium">
-              Products
+              Sản Phẩm
             </Link>
             <Link href="/categories" className="text-gray-700 hover:text-blue-600 font-medium">
-              Categories
+              Danh Mục
             </Link>
             {isAuthenticated && (
               <Link href="/orders" className="text-gray-700 hover:text-blue-600 font-medium">
-                My Orders
+                Đơn Hàng Của Tôi
               </Link>
             )}
           </div>
@@ -86,13 +86,13 @@ export function Navigation() {
                   <DropdownMenuItem asChild>
                     <Link href="/orders" className="flex items-center">
                       <Package className="mr-2 h-4 w-4" />
-                      My Orders
+                      Đơn Hàng Của Tôi
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/profile" className="flex items-center">
                       <Settings className="mr-2 h-4 w-4" />
-                      Profile Settings
+                      Cài Đặt Hồ Sơ
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -101,17 +101,17 @@ export function Navigation() {
                     className="text-red-600 focus:text-red-600"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    Logout
+                    Đăng Xuất
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <div className="flex items-center space-x-2">
                 <Button variant="ghost" asChild>
-                  <Link href="/login">Login</Link>
+                  <Link href="/login">Đăng Nhập</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/register">Register</Link>
+                  <Link href="/register">Đăng Ký</Link>
                 </Button>
               </div>
             )}

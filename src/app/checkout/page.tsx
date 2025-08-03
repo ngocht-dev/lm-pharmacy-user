@@ -100,17 +100,17 @@ export default function CheckoutPage() {
             <CardContent className="py-16">
               <CheckCircle className="mx-auto h-16 w-16 text-green-600 mb-4" />
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Order Placed Successfully!
+                Đặt Hàng Thành Công!
               </h2>
               <p className="text-gray-600 mb-6">
-                Your order has been placed and is being processed. You will receive a confirmation email shortly.
+                Đơn hàng của bạn đã được đặt và đang được xử lý. Bạn sẽ nhận được email xác nhận trong thời gian ngắn.
               </p>
               <div className="space-y-3">
                 <Button asChild className="w-full">
-                  <a href={`/orders/${orderId}`}>View Order Details</a>
+                  <a href={`/orders/${orderId}`}>Xem Chi Tiết Đơn Hàng</a>
                 </Button>
                 <Button variant="outline" className="w-full" asChild>
-                  <a href="/products">Continue Shopping</a>
+                  <a href="/products">Tiếp Tục Mua Sắm</a>
                 </Button>
               </div>
             </CardContent>
@@ -125,7 +125,7 @@ export default function CheckoutPage() {
       <Navigation />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Checkout</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-8">Thanh Toán</h1>
 
         <form onSubmit={handleSubmitOrder}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -133,7 +133,7 @@ export default function CheckoutPage() {
             <div>
               <Card>
                 <CardHeader>
-                  <CardTitle>Customer Information</CardTitle>
+                  <CardTitle>Thông Tin Khách Hàng</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {error && (
@@ -143,21 +143,21 @@ export default function CheckoutPage() {
                   )}
 
                   <div>
-                    <Label htmlFor="customerType">Customer Type</Label>
+                    <Label htmlFor="customerType">Loại Khách Hàng</Label>
                     <Select value={customerType} onValueChange={(value: CustomerType) => setCustomerType(value)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={CustomerType.INDIVIDUAL}>Individual</SelectItem>
-                        <SelectItem value={CustomerType.INSURANCE}>Insurance</SelectItem>
-                        <SelectItem value={CustomerType.ORGANIZATION}>Organization</SelectItem>
+                        <SelectItem value={CustomerType.INDIVIDUAL}>Cá Nhân</SelectItem>
+                        <SelectItem value={CustomerType.INSURANCE}>Bảo Hiểm</SelectItem>
+                        <SelectItem value={CustomerType.ORGANIZATION}>Tổ Chức</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <Label htmlFor="customerName">Full Name</Label>
+                    <Label htmlFor="customerName">Họ Và Tên</Label>
                     <Input
                       id="customerName"
                       value={customerName}
@@ -167,7 +167,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="customerPhone">Phone Number</Label>
+                    <Label htmlFor="customerPhone">Số Điện Thoại</Label>
                     <Input
                       id="customerPhone"
                       value={customerPhone}
@@ -177,7 +177,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="customerAddress">Delivery Address</Label>
+                    <Label htmlFor="customerAddress">Địa Chỉ Giao Hàng</Label>
                     <Input
                       id="customerAddress"
                       value={customerAddress}
@@ -187,22 +187,22 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="saleMethod">Payment Method</Label>
+                    <Label htmlFor="saleMethod">Phương Thức Thanh Toán</Label>
                     <Select value={saleMethod} onValueChange={(value: SaleMethod) => setSaleMethod(value)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={SaleMethod.CASH}>Cash</SelectItem>
-                        <SelectItem value={SaleMethod.CREDIT_CARD}>Credit Card</SelectItem>
-                        <SelectItem value={SaleMethod.MOBILE_MONEY}>Mobile Money</SelectItem>
-                        <SelectItem value={SaleMethod.INSURANCE}>Insurance</SelectItem>
+                        <SelectItem value={SaleMethod.CASH}>Tiền Mặt</SelectItem>
+                        <SelectItem value={SaleMethod.CREDIT_CARD}>Thẻ Tín Dụng</SelectItem>
+                        <SelectItem value={SaleMethod.MOBILE_MONEY}>Ví Điện Tử</SelectItem>
+                        <SelectItem value={SaleMethod.INSURANCE}>Bảo Hiểm</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <Label htmlFor="discount">Discount (%)</Label>
+                    <Label htmlFor="discount">Giảm Giá (%)</Label>
                     <Input
                       id="discount"
                       type="number"
@@ -220,7 +220,7 @@ export default function CheckoutPage() {
             <div>
               <Card>
                 <CardHeader>
-                  <CardTitle>Order Summary</CardTitle>
+                  <CardTitle>Tóm Tắt Đơn Hàng</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Order Items */}
@@ -237,21 +237,21 @@ export default function CheckoutPage() {
 
                   <div className="border-t pt-4 space-y-2">
                     <div className="flex justify-between">
-                      <span>Subtotal</span>
+                      <span>Tạm Tính</span>
                       <span>${subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Tax (10%)</span>
+                      <span>Thuế (10%)</span>
                       <span>${tax.toFixed(2)}</span>
                     </div>
                     {discountAmount > 0 && (
                       <div className="flex justify-between text-green-600">
-                        <span>Discount ({discount}%)</span>
+                        <span>Giảm Giá ({discount}%)</span>
                         <span>-${discountAmount.toFixed(2)}</span>
                       </div>
                     )}
                     <div className="flex justify-between font-semibold text-lg border-t pt-2">
-                      <span>Total</span>
+                      <span>Tổng Cộng</span>
                       <span>${finalTotal.toFixed(2)}</span>
                     </div>
                   </div>
@@ -262,7 +262,7 @@ export default function CheckoutPage() {
                       className="w-full"
                       disabled={isLoading}
                     >
-                      {isLoading ? 'Processing...' : 'Place Order'}
+                      {isLoading ? 'Đang Xử Lý...' : 'Đặt Hàng'}
                     </Button>
                   </div>
                 </CardContent>

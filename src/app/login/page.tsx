@@ -32,10 +32,10 @@ export default function LoginPage() {
       if (result.success) {
         router.push('/');
       } else {
-        setError(result.error || 'Login failed');
+        setError(result.error || 'Đăng nhập thất bại');
       }
     } catch (error) {
-      setError('An unexpected error occurred');
+      setError('Đã xảy ra lỗi không mong muốn');
     } finally {
       setIsLoading(false);
     }
@@ -50,15 +50,15 @@ export default function LoginPage() {
             <Heart className="h-10 w-10 text-blue-600" />
             <span className="text-2xl font-bold text-gray-900">LM Pharmacy</span>
           </Link>
-          <h2 className="text-xl text-gray-600">Welcome back</h2>
+          <h2 className="text-xl text-gray-600">Chào mừng bạn trở lại</h2>
         </div>
 
         {/* Login Form */}
         <Card>
           <CardHeader>
-            <CardTitle>Sign in to your account</CardTitle>
+            <CardTitle>Đăng nhập vào tài khoản của bạn</CardTitle>
             <CardDescription>
-              Enter your username and password to access your account
+              Nhập tên đăng nhập và mật khẩu để truy cập tài khoản
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -70,7 +70,7 @@ export default function LoginPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="username">Tên Đăng Nhập</Label>
                 <Input
                   id="username"
                   type="text"
@@ -78,12 +78,12 @@ export default function LoginPage() {
                   required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your username"
+                  placeholder="Nhập tên đăng nhập"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Mật Khẩu</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -92,7 +92,7 @@ export default function LoginPage() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
+                    placeholder="Nhập mật khẩu"
                   />
                   <Button
                     type="button"
@@ -115,18 +115,9 @@ export default function LoginPage() {
                 className="w-full"
                 disabled={isLoading}
               >
-                {isLoading ? 'Signing in...' : 'Sign in'}
+                {isLoading ? 'Đang Đăng Nhập...' : 'Đăng Nhập'}
               </Button>
             </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Don't have an account?{' '}
-                <Link href="/register" className="text-blue-600 hover:text-blue-500 font-medium">
-                  Sign up
-                </Link>
-              </p>
-            </div>
           </CardContent>
         </Card>
       </div>

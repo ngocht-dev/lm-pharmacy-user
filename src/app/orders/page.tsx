@@ -74,9 +74,9 @@ export default function OrdersPage() {
   };
 
   const getStatusText = (order: Order) => {
-    if (order.isCompleted) return 'Completed';
-    if (order.isPaid) return 'Processing';
-    return 'Pending';
+    if (order.isCompleted) return 'Hoàn Thành';
+    if (order.isPaid) return 'Đang Xử Lý';
+    return 'Chờ Xử Lý';
   };
 
   if (loading) {
@@ -86,7 +86,7 @@ export default function OrdersPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin" />
-            <span className="ml-2">Loading orders...</span>
+            <span className="ml-2">Đang tải đơn hàng...</span>
           </div>
         </div>
       </div>
@@ -102,13 +102,13 @@ export default function OrdersPage() {
             <CardContent className="py-16">
               <Package className="mx-auto h-12 w-12 text-gray-400 mb-4" />
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                No orders yet
+                Chưa có đơn hàng nào
               </h2>
               <p className="text-gray-600 mb-6">
-                You haven't placed any orders yet. Start shopping to see your orders here.
+                Bạn chưa đặt đơn hàng nào. Bắt đầu mua sắm để xem đơn hàng của bạn tại đây.
               </p>
               <Button asChild>
-                <Link href="/products">Start Shopping</Link>
+                <Link href="/products">Bắt Đầu Mua Sắm</Link>
               </Button>
             </CardContent>
           </Card>
@@ -122,22 +122,22 @@ export default function OrdersPage() {
       <Navigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Order History</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-8">Lịch Sử Đơn Hàng</h1>
 
         <Card>
           <CardHeader>
-            <CardTitle>Your Orders</CardTitle>
+            <CardTitle>Đơn Hàng Của Bạn</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Order Number</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Items</TableHead>
-                  <TableHead>Total</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead>Số Đơn Hàng</TableHead>
+                  <TableHead>Ngày</TableHead>
+                  <TableHead>Sản Phẩm</TableHead>
+                  <TableHead>Tổng Cộng</TableHead>
+                  <TableHead>Trạng Thái</TableHead>
+                  <TableHead>Thao Tác</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -150,7 +150,7 @@ export default function OrdersPage() {
                       {formatDate(order.createdAt)}
                     </TableCell>
                     <TableCell>
-                      {order.items.length} item{order.items.length !== 1 ? 's' : ''}
+                      {order.items.length} sản phẩm
                     </TableCell>
                     <TableCell>
                       ${order.total.toFixed(2)}
@@ -165,7 +165,7 @@ export default function OrdersPage() {
                         <Button size="sm" variant="outline" asChild>
                           <Link href={`/orders/${order.id}`}>
                             <Eye className="h-4 w-4 mr-1" />
-                            View
+                            Xem
                           </Link>
                         </Button>
                         <Button
@@ -174,7 +174,7 @@ export default function OrdersPage() {
                           onClick={() => handleDownloadReceipt(order.id)}
                         >
                           <Download className="h-4 w-4 mr-1" />
-                          Receipt
+                          Hóa Đơn
                         </Button>
                       </div>
                     </TableCell>

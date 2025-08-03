@@ -91,13 +91,13 @@ export default function ProductsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Products</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Sản Phẩm</h1>
           
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="flex gap-2 max-w-md">
             <Input
               type="text"
-              placeholder="Search products..."
+              placeholder="Tìm kiếm sản phẩm..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1"
@@ -123,7 +123,7 @@ export default function ProductsPage() {
             {loading ? (
               <div className="flex items-center justify-center py-12">
                 <Loader2 className="h-8 w-8 animate-spin" />
-                <span className="ml-2">Loading products...</span>
+                <span className="ml-2">Đang tải sản phẩm...</span>
               </div>
             ) : products.length > 0 ? (
               <>
@@ -141,7 +141,7 @@ export default function ProductsPage() {
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
                     >
-                      Previous
+                      Trước
                     </Button>
                     
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -159,14 +159,14 @@ export default function ProductsPage() {
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
                     >
-                      Next
+                      Sau
                     </Button>
                   </div>
                 )}
               </>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-500">No products found.</p>
+                <p className="text-gray-500">Không tìm thấy sản phẩm nào.</p>
               </div>
             )}
           </div>

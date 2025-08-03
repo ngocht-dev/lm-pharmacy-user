@@ -19,19 +19,19 @@ export function ProductFilters({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">Filters</CardTitle>
+        <CardTitle className="text-lg">Bộ Lọc</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Categories */}
         <div>
-          <h3 className="font-medium mb-3">Categories</h3>
+          <h3 className="font-medium mb-3">Danh Mục</h3>
           <div className="space-y-2">
             <Button
               variant={selectedCategory === '' ? 'default' : 'ghost'}
               className="w-full justify-start"
               onClick={() => onCategoryChange('')}
             >
-              All Categories
+              Tất Cả Danh Mục
             </Button>
             {categories.map((category) => (
               <Button
@@ -48,13 +48,13 @@ export function ProductFilters({
 
         {/* Stock Status */}
         <div>
-          <h3 className="font-medium mb-3">Availability</h3>
+          <h3 className="font-medium mb-3">Tình Trạng</h3>
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
-              <Badge variant="default">In Stock</Badge>
+              <Badge variant="default">Còn Hàng</Badge>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant="destructive">Out of Stock</Badge>
+              <Badge variant="destructive">Hết Hàng</Badge>
             </div>
           </div>
         </div>
