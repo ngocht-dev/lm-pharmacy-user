@@ -17,8 +17,8 @@ export interface User {
   delivery_area?: string;
   phone_number?: string;
   is_active: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 // Auth types
@@ -47,16 +47,16 @@ export interface Vendor {
   phone?: string;
   address?: string;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Category {
   id: string;
   name: string;
   description?: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Product {
@@ -74,8 +74,8 @@ export interface Product {
   minStockLevel: number;
   isActive: boolean;
   imageUrl?: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface ProductSearchParams {
@@ -90,6 +90,12 @@ export interface ProductSearchParams {
 }
 
 // Order types
+export const ORDER_STATUS_LABELS: Record<string, string> = {
+  PENDING: "Chờ xử lý",
+  COMPLETED: "Hoàn thành", 
+  CANCELLED: "Đã huỷ",
+};
+
 export enum CustomerType {
   INDIVIDUAL = 'INDIVIDUAL',
   INSURANCE = 'INSURANCE',
@@ -114,7 +120,7 @@ export interface OrderItem {
 
 export interface Order {
   id: string;
-  orderNumber: string;
+  code: string;
   userId: string;
   user?: User;
   customerType: CustomerType;
@@ -126,11 +132,13 @@ export interface Order {
   tax: number;
   discount: number;
   total: number;
+  total_value: number; // Added for consistency with API response
+  order_status: string; // Added order_status field
   isPaid: boolean;
   isCompleted: boolean;
   items: OrderItem[];
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateOrderDto {
@@ -170,6 +178,6 @@ export interface Message {
   subject: string;
   message: string;
   status?: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }

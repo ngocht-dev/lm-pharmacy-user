@@ -13,8 +13,20 @@ export const orderService = {
   },
 
   // Get user's orders
-  async getUserOrders(): Promise<ApiResponse<Order[]>> {
-    return apiClient.get<Order[]>(API_ENDPOINTS.ORDERS);
+  async getUserOrders(): Promise<ApiResponse<{
+      data: Order[];
+      total: number;
+      page: number;
+      limit: number;
+      lastPage: number;
+    }>> {
+    return apiClient.get<{
+      data: Order[];
+      total: number;
+      page: number;
+      limit: number;
+      lastPage: number;
+    }>(API_ENDPOINTS.ORDERS);
   },
 
   // Get order by ID

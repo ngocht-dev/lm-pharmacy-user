@@ -16,15 +16,35 @@ import {
 import { orderService } from '@/lib/services/orders';
 import { useAuth } from '@/contexts/auth-context';
 import type { Order } from '@/types/api';
+import { ORDER_STATUS_LABELS } from '@/types/api';
 import { Package, Download, Eye, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { set } from 'react-hook-form';
+import { formatVND } from '@/lib/utils/currency';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
   const router = useRouter();
+
+  const loadOrders = async () => {
+    try {
+      const response = await orderService.getUserOrders();
+      if (response.success && response.data) {
+        setOrders(response.data.data);
+        setTotal(response.data.total);
+        setTotalPages(response.data.lastPage);
+      }
+    } catch (error) {
+      console.error('Failed to load orders:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Handle authentication redirect
   useEffect(() => {
@@ -32,6 +52,13 @@ export default function OrdersPage() {
       router.push('/login');
     }
   }, [isAuthLoading, user, router]);
+
+  // Load orders when user is authenticated
+  useEffect(() => {
+    if (user && !isAuthLoading) {
+      loadOrders();
+    }
+  }, [user, isAuthLoading]);
 
   // Show loading while authentication is being checked
   if (isAuthLoading) {
@@ -50,23 +77,6 @@ export default function OrdersPage() {
     return null;
   }
 
-  useEffect(() => {
-    loadOrders();
-  }, []);
-
-  const loadOrders = async () => {
-    try {
-      const response = await orderService.getUserOrders();
-      if (response.success && response.data) {
-        setOrders(response.data);
-      }
-    } catch (error) {
-      console.error('Failed to load orders:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleDownloadReceipt = async (orderId: string) => {
     try {
       await orderService.downloadReceiptPDF(orderId);
@@ -75,26 +85,31 @@ export default function OrdersPage() {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('vi-VN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
     });
-  };
+};
 
   const getStatusColor = (order: Order) => {
-    if (order.isCompleted) return 'default';
-    if (order.isPaid) return 'secondary';
-    return 'destructive';
+    switch (order.order_status) {
+      case 'COMPLETED':
+        return 'default';
+      case 'PENDING':
+        return 'secondary';
+      case 'CANCELLED':
+        return 'destructive';
+      default:
+        return 'secondary';
+    }
   };
 
   const getStatusText = (order: Order) => {
-    if (order.isCompleted) return 'Hoàn Thành';
-    if (order.isPaid) return 'Đang Xử Lý';
-    return 'Chờ Xử Lý';
+    return ORDER_STATUS_LABELS[order.order_status] || order.order_status;
   };
 
   if (loading) {
@@ -162,16 +177,16 @@ export default function OrdersPage() {
                 {orders.map((order) => (
                   <TableRow key={order.id}>
                     <TableCell className="font-medium">
-                      {order.orderNumber}
+                      {order.code}
                     </TableCell>
                     <TableCell>
-                      {formatDate(order.createdAt)}
+                      {formatDate(order.created_at)}
                     </TableCell>
                     <TableCell>
                       {order.items.length} sản phẩm
                     </TableCell>
                     <TableCell>
-                      ${order.total.toFixed(2)}
+                      {formatVND(order.total_value)}
                     </TableCell>
                     <TableCell>
                       <Badge variant={getStatusColor(order)}>
