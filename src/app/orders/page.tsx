@@ -162,59 +162,106 @@ const formatDate = (dateString: string) => {
             <CardTitle>Đơn Hàng Của Bạn</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Số Đơn Hàng</TableHead>
-                  <TableHead>Ngày</TableHead>
-                  <TableHead>Sản Phẩm</TableHead>
-                  <TableHead>Tổng Cộng</TableHead>
-                  <TableHead>Trạng Thái</TableHead>
-                  <TableHead>Thao Tác</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell className="font-medium">
-                      {order.code}
-                    </TableCell>
-                    <TableCell>
-                      {formatDate(order.created_at)}
-                    </TableCell>
-                    <TableCell>
-                      {order.items.length} sản phẩm
-                    </TableCell>
-                    <TableCell>
-                      {formatVND(order.total_value)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={getStatusColor(order)}>
+            {/* Desktop Table View */}
+            <div className="hidden md:block">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Số Đơn Hàng</TableHead>
+                    <TableHead>Ngày</TableHead>
+                    <TableHead>Sản Phẩm</TableHead>
+                    <TableHead>Tổng Cộng</TableHead>
+                    <TableHead>Trạng Thái</TableHead>
+                    <TableHead>Thao Tác</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {orders.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell className="font-medium">
+                        {order.code}
+                      </TableCell>
+                      <TableCell>
+                        {formatDate(order.created_at)}
+                      </TableCell>
+                      <TableCell>
+                        {order.items.length} sản phẩm
+                      </TableCell>
+                      <TableCell>
+                        {formatVND(order.total_value)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={getStatusColor(order)}>
+                          {getStatusText(order)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button size="sm" variant="outline" asChild>
+                            <Link href={`/orders/${order.id}`}>
+                              <Eye className="h-4 w-4 mr-1" />
+                              Xem
+                            </Link>
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleDownloadReceipt(order.id)}
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            Hóa Đơn
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4">
+              {orders.map((order) => (
+                <Card key={order.id} className="p-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-medium text-sm">#{order.code}</p>
+                        <p className="text-xs text-gray-500">{formatDate(order.created_at)}</p>
+                      </div>
+                      <Badge variant={getStatusColor(order)} className="text-xs">
                         {getStatusText(order)}
                       </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button size="sm" variant="outline" asChild>
-                          <Link href={`/orders/${order.id}`}>
-                            <Eye className="h-4 w-4 mr-1" />
-                            Xem
-                          </Link>
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleDownloadReceipt(order.id)}
-                        >
-                          <Download className="h-4 w-4 mr-1" />
-                          Hóa Đơn
-                        </Button>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-sm text-gray-600">{order.items.length} sản phẩm</p>
+                        <p className="font-semibold">{formatVND(order.total_value)}</p>
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                    </div>
+                    
+                    <div className="flex space-x-2">
+                      <Button size="sm" variant="outline" asChild className="flex-1">
+                        <Link href={`/orders/${order.id}`}>
+                          <Eye className="h-4 w-4 mr-1" />
+                          Xem
+                        </Link>
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDownloadReceipt(order.id)}
+                        className="flex-1"
+                      >
+                        <Download className="h-4 w-4 mr-1" />
+                        Hóa Đơn
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>

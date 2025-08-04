@@ -177,7 +177,16 @@ class ApiClient {
       const searchParams = new URLSearchParams();
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
-          searchParams.append(key, value.toString());
+          if (Array.isArray(value)) {
+            // Handle array parameters (e.g., categoryIds)
+            value.forEach(item => {
+              if (item !== undefined && item !== null) {
+                searchParams.append(key, item.toString());
+              }
+            });
+          } else {
+            searchParams.append(key, value.toString());
+          }
         }
       });
       url += `?${searchParams.toString()}`;

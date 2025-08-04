@@ -43,41 +43,23 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="text-xs text-gray-600">{product.category.name}</p>
         </div>
       </CardHeader>
-
       <CardContent className="flex-1 pb-2">
-        {product.description && (
-          <p className="text-sm text-gray-600 line-clamp-2 mb-2">
-            {product.description}
-          </p>
-        )}
-        
         <div className="flex items-center justify-between mb-2">
           <span className="text-lg font-bold text-blue-600">
             {formatVND(product.sale_price)}
           </span>
-          <Badge variant={product.inventory_amount > 0 ? 'default' : 'destructive'}>
-            {product.inventory_amount > 0 ? 'Còn Hàng' : 'Hết Hàng'}
-          </Badge>
+          <Button
+            onClick={handleAddToCart}
+            disabled={product.inventory_amount === 0}
+            size="icon"
+            variant="ghost"
+            className="ml-2"
+            aria-label="Add to cart"
+          >
+            <ShoppingCart className="h-5 w-5" />
+          </Button>
         </div>
-
-        {product.inventory_amount > 0 && product.inventory_amount <= product.minStockLevel && (
-          <p className="text-xs text-amber-600">
-            Chỉ còn {product.inventory_amount} sản phẩm
-          </p>
-        )}
       </CardContent>
-
-      <CardFooter className="pt-0">
-        <Button
-          onClick={handleAddToCart}
-          disabled={product.inventory_amount === 0}
-          className="w-full"
-          size="sm"
-        >
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          {cartQuantity > 0 ? `Trong Giỏ (${cartQuantity})` : 'Thêm Vào Giỏ'}
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

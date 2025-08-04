@@ -71,7 +71,7 @@ export interface Product {
   price: number;
   sale_price: number;
   inventory_amount: number;
-  minStockLevel: number;
+  low_inventory_threshold: number;
   isActive: boolean;
   imageUrl?: string;
   created_at: string;
@@ -81,6 +81,7 @@ export interface Product {
 export interface ProductSearchParams {
   search?: string;
   categoryId?: string;
+  categoryIds?: string[]; // Added for multi-select support
   vendorId?: string;
   isActive?: boolean;
   page?: number;

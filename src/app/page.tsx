@@ -18,16 +18,16 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="bg-blue-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
               Đối Tác Chăm Sóc Sức Khỏe Đáng Tin Cậy
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100">
+            <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-blue-100 max-w-4xl mx-auto">
               Thuốc chất lượng được giao tận nhà. Nhanh chóng, đáng tin cậy và an toàn.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" asChild>
+              <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
                 <Link href="/products">
                   Mua Sắm Ngay
                   <ShoppingBag className="ml-2 h-5 w-5" />
@@ -39,13 +39,13 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16">
+      <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
               Tại Sao Chọn LM Pharmacy?
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Chúng tôi cam kết mang đến trải nghiệm chăm sóc sức khỏe tốt nhất
             </p>
           </div>

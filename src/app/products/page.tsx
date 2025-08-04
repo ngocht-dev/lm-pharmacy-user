@@ -17,7 +17,7 @@ export default function ProductsPage() {
     const [loading, setLoading] = useState(true);
     const [paginationLoading, setPaginationLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState<string>('');
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setTotalPages] = useState(1);
     const [total, setTotal] = useState(0);
@@ -50,8 +50,8 @@ export default function ProductsPage() {
                 params.search = searchQuery;
             }
 
-            if (selectedCategory) {
-                params.categoryId = selectedCategory;
+            if (selectedCategories.length > 0) {
+                params.categoryIds = selectedCategories;
             }
 
             const response = await productService.searchProducts(params);
@@ -67,7 +67,7 @@ export default function ProductsPage() {
             setLoading(false);
             setPaginationLoading(false);
         }
-    }, [currentPage, searchQuery, selectedCategory]); // Dependencies that should trigger reload
+    }, [currentPage, searchQuery, selectedCategories]); // Dependencies that should trigger reload
 
     // Load initial data
     useEffect(() => {
@@ -86,8 +86,8 @@ export default function ProductsPage() {
         // loadProducts will be called automatically by useEffect when currentPage changes
     };
 
-    const handleCategoryChange = (categoryId: string) => {
-        setSelectedCategory(categoryId);
+    const handleCategoriesChange = (categoryIds: string[]) => {
+        setSelectedCategories(categoryIds);
         setCurrentPage(1);
     };
 
@@ -104,38 +104,82 @@ export default function ProductsPage() {
         <div className="min-h-screen bg-gray-50">
             <Navigation />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                 {/* Page Header */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-4">Sản Phẩm</h1>
+                <div className="mb-6 sm:mb-8">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Sản Phẩm</h1>
 
-                    {/* Search Bar */}
-                    <form onSubmit={handleSearch} className="flex gap-2 max-w-md">
-                        <Input
-                            type="text"
-                            placeholder="Tìm kiếm sản phẩm..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="flex-1"
-                        />
-                        <Button type="submit" size="icon">
-                            <Search className="h-4 w-4" />
-                        </Button>
-                    </form>
+                    {/* Search Bar - Responsive Layout */}
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-2">
+                        <form onSubmit={handleSearch} className="flex gap-2 flex-1 max-w-md">
+                            <Input
+                                type="text"
+                                placeholder="Tìm kiếm sản phẩm..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="flex-1 text-sm sm:text-base"
+                            />
+                            <Button type="submit" size="icon" className="shrink-0">
+                                <Search className="h-4 w-4" />
+                            </Button>
+                        </form>
+                        
+                        {/* Filter Summary for Mobile */}
+                        <div className="sm:hidden">
+                            {selectedCategories.length > 0 && (
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm text-gray-600">
+                                        Đã lọc: {selectedCategories.length} danh mục
+                                    </span>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => handleCategoriesChange([])}
+                                        className="text-xs h-6 px-2"
+                                    >
+                                        Xóa
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Filters Sidebar */}
+                <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+                    {/* Filters Section */}
                     <div className="lg:w-64 flex-shrink-0">
                         <ProductFilters
                             categories={categories}
-                            selectedCategory={selectedCategory}
-                            onCategoryChange={handleCategoryChange}
+                            selectedCategories={selectedCategories}
+                            onCategoriesChange={handleCategoriesChange}
                         />
                     </div>
 
                     {/* Products Grid */}
                     <div className="flex-1">
+                        {/* Results Summary */}
+                        {!loading && (
+                            <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                <div className="text-sm text-gray-600">
+                                    {products.length > 0 ? (
+                                        <>Hiển thị {products.length} / {total} sản phẩm</>
+                                    ) : (
+                                        <>Không tìm thấy sản phẩm</>
+                                    )}
+                                </div>
+                                {selectedCategories.length > 0 && (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => handleCategoriesChange([])}
+                                        className="text-xs text-muted-foreground w-fit"
+                                    >
+                                        Xóa bộ lọc ({selectedCategories.length})
+                                    </Button>
+                                )}
+                            </div>
+                        )}
+
                         <div className="products-grid">
                             {loading ? (
                                 <div className="flex items-center justify-center py-12">
@@ -155,7 +199,7 @@ export default function ProductsPage() {
                                             </div>
                                         )}
                                         <div 
-                                            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-h-[600px] ${
+                                            className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 min-h-[400px] sm:min-h-[600px] ${
                                                 paginationLoading ? 'opacity-50' : ''
                                             }`}
                                         >

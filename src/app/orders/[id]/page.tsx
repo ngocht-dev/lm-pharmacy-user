@@ -184,25 +184,26 @@ export default function OrderDetailPage() {
             </Link>
           </Button>
           
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Đơn hàng #{order.code}
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-sm sm:text-base text-gray-600 mt-1">
                 Đặt hàng vào {formatDate(order.created_at)}
               </p>
             </div>
-            <div className="mt-4 sm:mt-0 flex flex-col sm:flex-row gap-2">
-              <Badge variant={getStatusColor(order)} className="w-fit">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Badge variant={getStatusColor(order)} className="w-fit text-xs sm:text-sm">
                 {getStatusText(order)}
               </Badge>
               <Button
                 variant="outline"
                 onClick={handleDownloadReceipt}
-                className="w-fit"
+                className="w-fit text-xs sm:text-sm"
+                size="sm"
               >
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                 Tải hóa đơn
               </Button>
             </div>
@@ -214,47 +215,76 @@ export default function OrderDetailPage() {
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Package className="h-5 w-5 mr-2" />
+                <CardTitle className="flex items-center text-base sm:text-lg">
+                  <Package className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                   Sản phẩm đã đặt
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Sản phẩm</TableHead>
-                      <TableHead className="text-center">Số lượng</TableHead>
-                      <TableHead className="text-right">Đơn giá</TableHead>
-                      <TableHead className="text-right">Thành tiền</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {order.items.map((item, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <div className="font-medium">
-                            {item.product?.name || `Sản phẩm #${item.productId}`}
-                          </div>
-                          {item.product?.barcode && (
-                            <div className="text-sm text-gray-500 mt-1">
-                              Mã vạch: {item.product.barcode}
-                            </div>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {item.quantity}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {formatVND(item.unitPrice)}
-                        </TableCell>
-                        <TableCell className="text-right font-medium">
-                          {formatVND(item.totalPrice)}
-                        </TableCell>
+                {/* Desktop Table View */}
+                <div className="hidden sm:block">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Sản phẩm</TableHead>
+                        <TableHead className="text-center">Số lượng</TableHead>
+                        <TableHead className="text-right">Đơn giá</TableHead>
+                        <TableHead className="text-right">Thành tiền</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {order.items.map((item, index) => (
+                        <TableRow key={index}>
+                          <TableCell>
+                            <div className="font-medium">
+                              {item.product?.name || `Sản phẩm #${item.productId}`}
+                            </div>
+                            {item.product?.barcode && (
+                              <div className="text-sm text-gray-500 mt-1">
+                                Mã vạch: {item.product.barcode}
+                              </div>
+                            )}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {item.quantity}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {formatVND(item.unitPrice)}
+                          </TableCell>
+                          <TableCell className="text-right font-medium">
+                            {formatVND(item.totalPrice)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="sm:hidden space-y-4">
+                  {order.items.map((item, index) => (
+                    <Card key={index} className="p-4 bg-gray-50">
+                      <div className="space-y-2">
+                        <div className="font-medium text-sm">
+                          {item.product?.name || `Sản phẩm #${item.productId}`}
+                        </div>
+                        {item.product?.barcode && (
+                          <div className="text-xs text-gray-500">
+                            Mã vạch: {item.product.barcode}
+                          </div>
+                        )}
+                        <div className="flex justify-between items-center text-sm">
+                          <span>Số lượng: {item.quantity}</span>
+                          <span>{formatVND(item.unitPrice)}</span>
+                        </div>
+                        <div className="flex justify-between items-center font-medium">
+                          <span>Thành tiền:</span>
+                          <span>{formatVND(item.totalPrice)}</span>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>
