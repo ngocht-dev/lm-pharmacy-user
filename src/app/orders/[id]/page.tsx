@@ -249,10 +249,10 @@ export default function OrderDetailPage() {
                             {item.quantity}
                           </TableCell>
                           <TableCell className="text-right">
-                            {formatVND(item.unitPrice)}
+                            {formatVND(item.unit_price)}
                           </TableCell>
                           <TableCell className="text-right font-medium">
-                            {formatVND(item.totalPrice)}
+                            {formatVND(item.total_price)}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -275,11 +275,11 @@ export default function OrderDetailPage() {
                         )}
                         <div className="flex justify-between items-center text-sm">
                           <span>Số lượng: {item.quantity}</span>
-                          <span>{formatVND(item.unitPrice)}</span>
+                          <span>{formatVND(item.unit_price)}</span>
                         </div>
                         <div className="flex justify-between items-center font-medium">
                           <span>Thành tiền:</span>
-                          <span>{formatVND(item.totalPrice)}</span>
+                          <span>{formatVND(item.total_price)}</span>
                         </div>
                       </div>
                     </Card>
@@ -300,22 +300,15 @@ export default function OrderDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <span>Tạm tính:</span>
                   <span>{formatVND(order.subtotal)}</span>
                 </div>
-                
+                 */}
                 {order.discount > 0 && (
                   <div className="flex justify-between text-green-600">
                     <span>Giảm giá:</span>
                     <span>-{formatVND(order.discount)}</span>
-                  </div>
-                )}
-                
-                {order.tax > 0 && (
-                  <div className="flex justify-between">
-                    <span>Thuế:</span>
-                    <span>{formatVND(order.tax)}</span>
                   </div>
                 )}
                 

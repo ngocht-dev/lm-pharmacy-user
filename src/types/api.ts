@@ -115,8 +115,8 @@ export interface OrderItem {
   productId: string;
   product?: Product;
   quantity: number;
-  unitPrice: number;
-  totalPrice: number;
+  unit_price: number;
+  total_price: number;
 }
 
 export interface Order {
@@ -146,7 +146,7 @@ export interface CreateOrderDto {
   items: {
     product_id: number; // Changed from productId string to product_id number
     quantity: number;
-    unit_price: number; // Changed from unitPrice to unit_price
+    unit_price: number; // Changed from unit_price to unit_price
   }[];
 }
 

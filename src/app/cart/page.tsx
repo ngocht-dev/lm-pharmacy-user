@@ -35,17 +35,17 @@ export default function CartPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navigation />
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-2xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16">
           <Card className="text-center">
-            <CardContent className="py-16">
-              <ShoppingBag className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <CardContent className="py-8 sm:py-12 lg:py-16">
+              <ShoppingBag className="mx-auto h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-gray-400 mb-3 sm:mb-4" />
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                 Giỏ hàng của bạn đang trống
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
                 Thêm một số sản phẩm vào giỏ hàng để bắt đầu
               </p>
-              <Button asChild>
+              <Button asChild className="text-sm sm:text-base px-4 sm:px-6">
                 <Link href="/products">Tiếp Tục Mua Sắm</Link>
               </Button>
             </CardContent>
@@ -59,110 +59,199 @@ export default function CartPage() {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8">Giỏ Hàng</h1>
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
+        <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 lg:mb-8">Giỏ Hàng</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Sản Phẩm Trong Giỏ ({items.length})</CardTitle>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+                  <CardTitle className="text-base sm:text-lg">Sản Phẩm Trong Giỏ ({items.length})</CardTitle>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={clearCart}
-                    className="text-red-600 hover:text-red-700"
+                    className="text-red-600 hover:text-red-700 text-xs sm:text-sm self-start sm:self-auto"
                   >
                     Xóa Giỏ Hàng
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {items.map((item) => (
                     <div
                       key={item.product.id}
-                      className="flex items-center space-x-4 py-4 border-b last:border-b-0"
+                      className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 py-3 sm:py-4 border-b last:border-b-0"
                     >
-                      {/* Product Image */}
-                      <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg">
-                        {item.product.imageUrl ? (
-                          <Image
-                            src={item.product.imageUrl}
-                            alt={item.product.name}
-                            width={64}
-                            height={64}
-                            className="w-full h-full object-cover rounded-lg"
+                      {/* Mobile Layout - Stacked */}
+                      <div className="flex items-center gap-3 sm:hidden">
+                        {/* Product Image */}
+                        <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg">
+                          {item.product.imageUrl ? (
+                            <Image
+                              src={item.product.imageUrl}
+                              alt={item.product.name}
+                              width={48}
+                              height={48}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <ShoppingBag className="h-5 w-5 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Product Details - Mobile */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
+                            {item.product.name}
+                          </h3>
+                          <p className="text-xs text-gray-500">
+                            {item.product.category.name}
+                          </p>
+                          <p className="text-sm font-medium text-blue-600">
+                            {formatVND(item.product.sale_price)}
+                          </p>
+                        </div>
+
+                        {/* Remove Button - Mobile */}
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => removeItem(item.product.id)}
+                          className="text-red-600 hover:text-red-700 h-8 w-8"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      {/* Mobile Quantity and Total */}
+                      <div className="flex items-center justify-between sm:hidden">
+                        {/* Quantity Controls - Mobile */}
+                        <div className="flex items-center gap-2">
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
+                            disabled={item.quantity <= 1}
+                            className="h-8 w-8"
+                          >
+                            <Minus className="h-3 w-3" />
+                          </Button>
+                          <Input
+                            type="number"
+                            value={item.quantity}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value) || 1;
+                              handleQuantityChange(item.product.id, value);
+                            }}
+                            className="w-12 h-8 text-center text-sm"
+                            min="1"
+                            max={item.product.inventory_amount}
                           />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <ShoppingBag className="h-6 w-6 text-gray-400" />
-                          </div>
-                        )}
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
+                            disabled={item.quantity >= item.product.inventory_amount}
+                            className="h-8 w-8"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </div>
+
+                        {/* Item Total - Mobile */}
+                        <div className="text-right">
+                          <p className="text-sm font-medium text-gray-900">
+                            {formatVND(item.product.sale_price * item.quantity)}
+                          </p>
+                        </div>
                       </div>
 
-                      {/* Product Details */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-medium text-gray-900 truncate">
-                          {item.product.name}
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          {item.product.category.name}
-                        </p>
-                        <p className="text-sm font-medium text-blue-600">
-                          {formatVND(item.product.sale_price)}
-                        </p>
-                      </div>
+                      {/* Desktop Layout - Hidden on mobile */}
+                      <div className="hidden sm:flex sm:items-center sm:space-x-4 sm:w-full">
+                        {/* Product Image */}
+                        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg">
+                          {item.product.imageUrl ? (
+                            <Image
+                              src={item.product.imageUrl}
+                              alt={item.product.name}
+                              width={64}
+                              height={64}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <ShoppingBag className="h-6 w-6 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
 
-                      {/* Quantity Controls */}
-                      <div className="flex items-center space-x-2">
+                        {/* Product Details */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-medium text-gray-900 truncate">
+                            {item.product.name}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            {item.product.category.name}
+                          </p>
+                          <p className="text-sm font-medium text-blue-600">
+                            {formatVND(item.product.sale_price)}
+                          </p>
+                        </div>
+
+                        {/* Quantity Controls */}
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
+                            disabled={item.quantity <= 1}
+                          >
+                            <Minus className="h-4 w-4" />
+                          </Button>
+                          <Input
+                            type="number"
+                            value={item.quantity}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value) || 1;
+                              handleQuantityChange(item.product.id, value);
+                            }}
+                            className="w-16 text-center"
+                            min="1"
+                            max={item.product.inventory_amount}
+                          />
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
+                            disabled={item.quantity >= item.product.inventory_amount}
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </div>
+
+                        {/* Item Total */}
+                        <div className="text-right">
+                          <p className="text-sm font-medium text-gray-900">
+                            {formatVND(item.product.sale_price * item.quantity)}
+                          </p>
+                        </div>
+
+                        {/* Remove Button */}
                         <Button
                           size="icon"
-                          variant="outline"
-                          onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
-                          disabled={item.quantity <= 1}
+                          variant="ghost"
+                          onClick={() => removeItem(item.product.id)}
+                          className="text-red-600 hover:text-red-700"
                         >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                        <Input
-                          type="number"
-                          value={item.quantity}
-                          onChange={(e) => {
-                            const value = parseInt(e.target.value) || 1;
-                            handleQuantityChange(item.product.id, value);
-                          }}
-                          className="w-16 text-center"
-                          min="1"
-                          max={item.product.inventory_amount}
-                        />
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
-                          disabled={item.quantity >= item.product.inventory_amount}
-                        >
-                          <Plus className="h-4 w-4" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-
-                      {/* Item Total */}
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900">
-                          {formatVND(item.product.sale_price * item.quantity)}
-                        </p>
-                      </div>
-
-                      {/* Remove Button */}
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => removeItem(item.product.id)}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
                     </div>
                   ))}
                 </div>
@@ -174,29 +263,29 @@ export default function CartPage() {
           <div className="lg:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle>Tóm Tắt Đơn Hàng</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Tóm Tắt Đơn Hàng</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between">
+              <CardContent className="space-y-3 sm:space-y-4">
+                <div className="flex justify-between text-sm sm:text-base">
                   <span>Tạm Tính</span>
                   <span>{formatVND(total)}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between text-sm sm:text-base">
                   <span>Phí Vận Chuyển</span>
                   <span>--</span>
                 </div>
-                <div className="border-t pt-4">
-                  <div className="flex justify-between font-semibold">
+                <div className="border-t pt-3 sm:pt-4">
+                  <div className="flex justify-between font-semibold text-sm sm:text-base">
                     <span>Tổng Cộng</span>
                     <span>{formatVND(total)}</span>
                   </div>
                 </div>
 
-                <div className="space-y-3 pt-4">
-                  <Button onClick={handleCheckout} className="w-full">
+                <div className="space-y-2 sm:space-y-3 pt-3 sm:pt-4">
+                  <Button onClick={handleCheckout} className="w-full text-sm sm:text-base h-9 sm:h-10">
                     {isAuthenticated ? 'Tiến Hành Thanh Toán' : 'Đăng Nhập Để Thanh Toán'}
                   </Button>
-                  <Button variant="outline" className="w-full" asChild>
+                  <Button variant="outline" className="w-full text-sm sm:text-base h-9 sm:h-10" asChild>
                     <Link href="/products">Tiếp Tục Mua Sắm</Link>
                   </Button>
                 </div>

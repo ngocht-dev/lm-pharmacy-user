@@ -1,5 +1,5 @@
 // API Configuration
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://147.93.157.91:3001';
 
 // API endpoints
 export const API_ENDPOINTS = {
