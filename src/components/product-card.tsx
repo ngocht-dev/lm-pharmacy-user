@@ -48,16 +48,23 @@ export function ProductCard({ product }: ProductCardProps) {
           <span className="text-lg font-bold text-blue-600">
             {formatVND(product.sale_price)}
           </span>
-          <Button
-            onClick={handleAddToCart}
-            disabled={product.inventory_amount === 0}
-            size="icon"
-            variant="ghost"
-            className="ml-2"
-            aria-label="Add to cart"
-          >
-            <ShoppingCart className="h-5 w-5" />
-          </Button>
+          <div className="relative">
+            <Button
+              onClick={handleAddToCart}
+              disabled={product.inventory_amount === 0}
+              size="icon"
+              variant="ghost"
+              className="ml-2"
+              aria-label="Add to cart"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {cartQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] flex items-center justify-center">
+                  {cartQuantity}
+                </span>
+              )}
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
