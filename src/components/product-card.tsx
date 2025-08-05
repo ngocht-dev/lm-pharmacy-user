@@ -51,7 +51,6 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="relative">
             <Button
               onClick={handleAddToCart}
-              disabled={product.inventory_amount === 0}
               size="icon"
               variant="ghost"
               className="ml-2"

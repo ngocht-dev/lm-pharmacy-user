@@ -151,13 +151,11 @@ export default function CartPage() {
                             }}
                             className="w-12 h-8 text-center text-sm"
                             min="1"
-                            max={item.product.inventory_amount}
                           />
                           <Button
                             size="icon"
                             variant="outline"
                             onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
-                            disabled={item.quantity >= item.product.inventory_amount}
                             className="h-8 w-8"
                           >
                             <Plus className="h-3 w-3" />
@@ -223,13 +221,11 @@ export default function CartPage() {
                             }}
                             className="w-16 text-center"
                             min="1"
-                            max={item.product.inventory_amount}
                           />
                           <Button
                             size="icon"
                             variant="outline"
                             onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
-                            disabled={item.quantity >= item.product.inventory_amount}
                           >
                             <Plus className="h-4 w-4" />
                           </Button>
