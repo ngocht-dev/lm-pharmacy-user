@@ -41,7 +41,7 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardHeader>
       <CardContent className="flex-1 pb-2">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-lg font-bold text-blue-600">
+          <span className="text-lg font-bold text-orange-600">
             {formatVND(product.sale_price)}
           </span>
           <div className="relative">
@@ -54,7 +54,7 @@ export function ProductCard({ product }: ProductCardProps) {
             >
               <ShoppingCart className="h-5 w-5" />
               {cartQuantity > 0 && (
-                <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] flex items-center justify-center">
                   {cartQuantity}
                 </span>
               )}

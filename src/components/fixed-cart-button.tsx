@@ -13,7 +13,7 @@ export function FixedCartButton() {
     <Link href="/cart">
       <Button
         size="lg"
-        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-blue-600 hover:bg-blue-700"
+        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-orange-600 hover:bg-orange-700"
         aria-label="Giỏ hàng"
       >
         <ShoppingCart className="h-6 w-6" />

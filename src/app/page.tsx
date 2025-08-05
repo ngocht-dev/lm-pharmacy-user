@@ -64,8 +64,8 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <Card className="text-center">
               <CardHeader>
-                <div className="mx-auto bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                  <Clock className="h-6 w-6 text-blue-600" />
+                <div className="mx-auto bg-orange-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                  <Clock className="h-6 w-6 text-orange-600" />
                 </div>
                 <CardTitle>Dịch Vụ 24/7</CardTitle>
               </CardHeader>

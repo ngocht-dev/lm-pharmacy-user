@@ -170,7 +170,7 @@ export function ProductFilters({
                       size="sm"
                       className={`w-full justify-start h-8 px-2 ${
                         selectedCategories.includes(category.id)
-                          ? 'bg-blue-50 text-blue-700 hover:bg-blue-100'
+                          ? 'bg-orange-50 text-orange-700 hover:bg-orange-100'
                           : 'hover:bg-gray-50'
                       }`}
                       onClick={() => handleCategoryToggle(category.id)}
@@ -178,7 +178,7 @@ export function ProductFilters({
                       <div className="flex items-center space-x-2 w-full">
                         <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
                           selectedCategories.includes(category.id)
-                            ? 'bg-blue-600 border-blue-600'
+                            ? 'bg-orange-600 border-orange-600'
                             : 'border-gray-300'
                         }`}>
                           {selectedCategories.includes(category.id) && (

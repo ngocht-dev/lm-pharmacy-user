@@ -44,21 +44,21 @@ export function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
-              <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
+              <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600" />
               <span className="text-lg sm:text-xl font-bold text-gray-900">LM Pharmacy</span>
             </Link>
           </div>
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/products" className="text-gray-700 hover:text-blue-600 font-medium">
+            <Link href="/products" className="text-gray-700 hover:text-orange-600 font-medium">
               Sản Phẩm
             </Link>
-            <Link href="/contact" className="text-gray-700 hover:text-blue-600 font-medium">
+            <Link href="/contact" className="text-gray-700 hover:text-orange-600 font-medium">
               Liên Hệ
             </Link>
             {isAuthenticated && (
-              <Link href="/orders" className="text-gray-700 hover:text-blue-600 font-medium">
+              <Link href="/orders" className="text-gray-700 hover:text-orange-600 font-medium">
                 Đơn Hàng Của Tôi
               </Link>
             )}
@@ -148,14 +148,14 @@ export function Navigation() {
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link 
                 href="/products" 
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
                 onClick={closeMobileMenu}
               >
                 Sản Phẩm
               </Link>
               <Link 
                 href="/contact" 
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
                 onClick={closeMobileMenu}
               >
                 Liên Hệ
@@ -163,7 +163,7 @@ export function Navigation() {
               {isAuthenticated && (
                 <Link 
                   href="/orders" 
-                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
                   onClick={closeMobileMenu}
                 >
                   Đơn Hàng Của Tôi
@@ -181,7 +181,7 @@ export function Navigation() {
                   </div>
                   <Link 
                     href="/profile" 
-                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
                     onClick={closeMobileMenu}
                   >
                     <Settings className="inline mr-2 h-4 w-4" />
