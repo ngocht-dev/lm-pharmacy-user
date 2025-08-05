@@ -13,20 +13,42 @@ export const orderService = {
   },
 
   // Get user's orders
-  async getUserOrders(): Promise<ApiResponse<{
+  async getUserOrders(params?: {
+    page?: number;
+    limit?: number;
+    order_status?: string;
+  }): Promise<ApiResponse<{
       data: Order[];
       total: number;
       page: number;
       limit: number;
       lastPage: number;
     }>> {
+    const queryParams = new URLSearchParams();
+    
+    if (params?.page) {
+      queryParams.append('page', params.page.toString());
+    }
+    
+    if (params?.limit) {
+      queryParams.append('limit', params.limit.toString());
+    }
+    
+    if (params?.order_status) {
+      queryParams.append('order_status', params.order_status);
+    }
+    
+    const url = queryParams.toString() 
+      ? `${API_ENDPOINTS.ORDERS}?${queryParams.toString()}`
+      : API_ENDPOINTS.ORDERS;
+    
     return apiClient.get<{
       data: Order[];
       total: number;
       page: number;
       limit: number;
       lastPage: number;
-    }>(API_ENDPOINTS.ORDERS);
+    }>(url);
   },
 
   // Get order by ID
