@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/auth-context';
 import { useCart } from '@/contexts/cart-context';
 import { Button } from '@/components/ui/button';
@@ -13,10 +14,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
-import { 
-  ShoppingCart, 
-  User, 
-  LogOut, 
+import {
+  ShoppingCart,
+  User,
+  LogOut,
   Settings,
   Package,
   Heart,
@@ -44,8 +45,15 @@ export function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
-              <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600" />
-              <span className="text-lg sm:text-xl font-bold text-gray-900">LM Pharmacy</span>
+                <div className="relative h-10 w-32">
+                <Image
+                  src="/logo.jpg"
+                  alt="LMC Pharmacy Logo"
+                  fill
+                  className="object-contain rounded-md"
+                  priority
+                />
+                </div>
             </Link>
           </div>
 
@@ -71,8 +79,8 @@ export function Navigation() {
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                 {itemCount > 0 && (
-                  <Badge 
-                    variant="destructive" 
+                  <Badge
+                    variant="destructive"
                     className="absolute -top-2 -right-2 h-4 w-4 sm:h-5 sm:w-5 rounded-full p-0 flex items-center justify-center text-xs"
                   >
                     {itemCount}
@@ -109,7 +117,7 @@ export function Navigation() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
                       onClick={logout}
                       className="text-red-600 focus:text-red-600"
                     >
@@ -131,9 +139,9 @@ export function Navigation() {
             </div>
 
             {/* Mobile menu button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="md:hidden"
               onClick={toggleMobileMenu}
             >
@@ -146,23 +154,23 @@ export function Navigation() {
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link 
-                href="/products" 
+              <Link
+                href="/products"
                 className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
                 onClick={closeMobileMenu}
               >
                 Sản Phẩm
               </Link>
-              <Link 
-                href="/contact" 
+              <Link
+                href="/contact"
                 className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
                 onClick={closeMobileMenu}
               >
                 Liên Hệ
               </Link>
               {isAuthenticated && (
-                <Link 
-                  href="/orders" 
+                <Link
+                  href="/orders"
                   className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
                   onClick={closeMobileMenu}
                 >
@@ -170,7 +178,7 @@ export function Navigation() {
                 </Link>
               )}
             </div>
-            
+
             {/* Mobile user section */}
             <div className="border-t border-gray-200 px-2 pt-4 pb-3">
               {isAuthenticated ? (
@@ -179,15 +187,15 @@ export function Navigation() {
                     <p className="text-base font-medium text-gray-900">{user?.name || user?.username}</p>
                     <p className="text-sm text-gray-500">@{user?.username}</p>
                   </div>
-                  <Link 
-                    href="/profile" 
+                  <Link
+                    href="/profile"
                     className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50 rounded-md"
                     onClick={closeMobileMenu}
                   >
                     <Settings className="inline mr-2 h-4 w-4" />
                     Cài Đặt Hồ Sơ
                   </Link>
-                  <button 
+                  <button
                     onClick={() => {
                       logout();
                       closeMobileMenu();
