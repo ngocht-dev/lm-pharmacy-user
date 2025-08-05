@@ -20,6 +20,7 @@ import { orderService } from '@/lib/services/orders';
 import { CustomerType, SaleMethod, CreateOrderDto } from '@/types/api';
 import { CheckCircle, Package, CreditCard, Truck } from 'lucide-react';
 import { formatVND } from '@/lib/utils/currency';
+import { getProductImageUrl } from '@/lib/utils/product';
 import Image from 'next/image';
 import { toast } from 'sonner';
 
@@ -193,9 +194,9 @@ export default function CheckoutPage() {
                                                     {/* Product Image and Name */}
                                                     <div className="flex items-center gap-3">
                                                         <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-lg border">
-                                                            {item.product.imageUrl ? (
+                                                            {getProductImageUrl(item.product) ? (
                                                                 <Image
-                                                                    src={item.product.imageUrl}
+                                                                    src={getProductImageUrl(item.product)!}
                                                                     alt={item.product.name}
                                                                     width={64}
                                                                     height={64}

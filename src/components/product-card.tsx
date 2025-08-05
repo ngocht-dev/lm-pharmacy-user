@@ -8,6 +8,7 @@ import { useCart } from '@/contexts/cart-context';
 import type { Product } from '@/types/api';
 import { ShoppingCart, Package } from 'lucide-react';
 import { formatVND } from '@/lib/utils/currency';
+import { getProductImageUrl } from '@/lib/utils/product';
 
 interface ProductCardProps {
   product: Product;
@@ -21,13 +22,15 @@ export function ProductCard({ product }: ProductCardProps) {
     addItem(product, 1);
   };
 
+  const imageUrl = getProductImageUrl(product);
+
   return (
     <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
       <CardHeader className="pb-2">
         <div className="aspect-square relative bg-gray-100 rounded-lg mb-2">
-          {product.imageUrl ? (
+          {imageUrl ? (
             <Image
-              src={product.imageUrl}
+              src={imageUrl}
               alt={product.name}
               fill
               className="object-cover rounded-lg"

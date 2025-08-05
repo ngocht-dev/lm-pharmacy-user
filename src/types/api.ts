@@ -74,6 +74,8 @@ export interface Product {
   low_inventory_threshold: number;
   isActive: boolean;
   imageUrl?: string;
+  thumbnail_url?: string;
+  photo_urls?: string[];
   created_at: string;
   updated_at: string;
 }
