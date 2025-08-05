@@ -5,6 +5,7 @@ import { Navigation } from '@/components/navigation';
 import { ProductCard } from '@/components/product-card';
 import { ProductFilters } from '@/components/product-filters';
 import { ProductPagination } from '@/components/product-pagination';
+import { FixedCartButton } from '@/components/fixed-cart-button';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { productService } from '@/lib/services/products';
@@ -227,6 +228,9 @@ export default function ProductsPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Fixed Cart Button */}
+            <FixedCartButton />
         </div>
     );
 }
