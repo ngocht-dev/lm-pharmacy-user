@@ -85,8 +85,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900">Địa Chỉ</h3>
                     <p className="text-gray-600">
-                      495/8/16 Tô Hiến Thành, P.14, Quận 10<br />
-                      Thành phố Hồ Chí Minh, Việt Nam
+                       Số 1014 Phạm Văn Đồng, Phường Hiệp Bình, Thành phố Hồ Chí Minh
                     </p>
                   </div>
                 </div>
@@ -114,7 +113,6 @@ export default function ContactPage() {
                     <div className="text-gray-600">
                       <p>Thứ 2 - Thứ 6: 8:00 - 20:00</p>
                       <p>Thứ 7: 8:00 - 18:00</p>
-                      <p>Chủ nhật: 9:00 - 17:00</p>
                     </div>
                   </div>
                 </div>
@@ -221,7 +219,7 @@ export default function ContactPage() {
         </div>
 
         {/* FAQ Section */}
-        <div className="mt-16">
+        {/* <div className="mt-16">
           <Card>
             <CardHeader>
               <CardTitle>Câu Hỏi Thường Gặp</CardTitle>
@@ -256,7 +254,7 @@ export default function ContactPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
+        </div> */}
       </div>
     </div>
   );

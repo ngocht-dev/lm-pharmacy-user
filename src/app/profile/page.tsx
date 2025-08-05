@@ -243,6 +243,6 @@ export default function ProfilePage() {
           </Card>
         </div>
       </div>
-    </div>
+      </div>
   );
 }

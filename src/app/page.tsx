@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Navigation } from '@/components/navigation';
+import { FixedCartButton } from '@/components/fixed-cart-button';
 import {
   ShoppingBag,
   Clock,
@@ -17,20 +18,30 @@ export default function HomePage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="bg-blue-600 text-white">
+      <section className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
-              Đối Tác Chăm Sóc Sức Khỏe Đáng Tin Cậy
+              LMC Pharco chuyên phân phối sỉ Kẹo Cốm - Hoá Mỹ Phẩm - Dụng Cụ Y Tế (Tanaphar, Dophaco) - Dầu, Cao Xoa
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-blue-100 max-w-4xl mx-auto">
-              Thuốc chất lượng được giao tận nhà. Nhanh chóng, đáng tin cậy và an toàn.
+            <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-orange-100 max-w-4xl mx-auto">
+              Hoá Đơn Đầy Đủ - Giá Tốt - Miễn Phí Giao Hàng - Nhiều Chương Trình Khuyến Mãi
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                style={{
+                  width: '280px',
+                  height: '80px',
+                  fontSize: '40px',
+                }}
+                variant="secondary"
+                asChild
+                className="w-full sm:w-auto"
+              >
                 <Link href="/products">
-                  Mua Sắm Ngay
-                  <ShoppingBag className="ml-2 h-5 w-5" />
+                  Đặt Hàng
+                  <ShoppingBag className="ml-3 h-12 w-12" />
                 </Link>
               </Button>
             </div>
@@ -39,11 +50,11 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-12 sm:py-16">
+      {/* < section className="py-12 sm:py-16" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-              Tại Sao Chọn LM Pharmacy?
+              Tại Sao Chọn LMC Pharco?
             </h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Chúng tôi cam kết mang đến trải nghiệm chăm sóc sức khỏe tốt nhất
@@ -108,34 +119,37 @@ export default function HomePage() {
             </Card>
           </div>
         </div>
-      </section>
+      </section > */}
 
       {/* CTA Section */}
-      <section className="bg-gray-900 text-white py-16">
+      < section className="bg-gray-900 text-white py-16" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Sẵn Sàng Bắt Đầu?
-          </h2>
+          {/* <h2 className="text-3xl font-bold mb-4">
+           Tại sao phải ?
+          </h2> */}
           <p className="text-xl text-gray-300 mb-8">
-            Tạo tài khoản ngay hôm nay và bắt đầu đặt mua thuốc trực tuyến
+             Tạo tài khoản để đặt hàng nhanh, đúng sản phẩm, cân đối số tiền thanh toán và nhận nhiều ưu đãi
           </p>
           <Button size="lg" variant="secondary" asChild>
             <Link href="/contact">
-              Liên Hệ Chúng Tôi
+              Liên hệ để tạo tài khoản
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
         </div>
-      </section>
+      </section >
 
       {/* Footer */}
-      <footer className="bg-white border-t">
+      < footer className="bg-white border-t" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-gray-600">
             <p>&copy; 2025 LM Pharmacy. All rights reserved.</p>
           </div>
         </div>
-      </footer>
-    </div>
+      </footer >
+
+      {/* Fixed Cart Button */}
+      <FixedCartButton />
+    </div >
   );
 }
