@@ -200,15 +200,6 @@ export default function OrderDetailPage() {
               <Badge variant={getStatusColor(order)} className="w-fit text-xs sm:text-sm">
                 {getStatusText(order)}
               </Badge>
-              <Button
-                variant="outline"
-                onClick={handleDownloadReceipt}
-                className="w-fit text-xs sm:text-sm"
-                size="sm"
-              >
-                <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                Tải hóa đơn
-              </Button>
             </div>
           </div>
         </div>

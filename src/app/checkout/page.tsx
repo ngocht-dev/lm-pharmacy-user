@@ -155,7 +155,7 @@ export default function CheckoutPage() {
                                     <a href={`/orders/${orderId}`}>Xem Chi Tiết Đơn Hàng</a>
                                 </Button>
                                 <Button variant="outline" className="w-full text-sm sm:text-base h-9 sm:h-10" asChild>
-                                    <a href="/products">Tiếp Tục Mua Sắm</a>
+                                    <a href="/products">Tiếp Tục Đặt Hàng</a>
                                 </Button>
                             </div>
                         </CardContent>

@@ -27,7 +27,7 @@ export default function HomePage() {
             <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-orange-100 max-w-4xl mx-auto">
               Hoá Đơn Đầy Đủ - Giá Tốt - Miễn Phí Giao Hàng - Nhiều Chương Trình Khuyến Mãi
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-row gap-4 justify-center">
               <Button
                 size="lg"
                 style={{
@@ -41,7 +41,7 @@ export default function HomePage() {
               >
                 <Link href="/products">
                   Đặt Hàng
-                  <ShoppingBag className="ml-3 h-12 w-12" />
+                  <ShoppingBag className="ml-3" style={{ width: '32px', height: '32px' }} />
                 </Link>
               </Button>
             </div>
@@ -128,7 +128,7 @@ export default function HomePage() {
            Tại sao phải ?
           </h2> */}
           <p className="text-xl text-gray-300 mb-8">
-             Tạo tài khoản để đặt hàng nhanh, đúng sản phẩm, cân đối số tiền thanh toán và nhận nhiều ưu đãi
+            Tạo tài khoản để đặt hàng nhanh, đúng sản phẩm, cân đối số tiền thanh toán và nhận nhiều ưu đãi
           </p>
           <Button size="lg" variant="secondary" asChild>
             <Link href="/contact">

@@ -45,7 +45,8 @@ export function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
-                <div className="relative h-10 w-32">
+              {/* Mobile Logo - smaller */}
+              <div className="relative h-8 w-24 sm:hidden">
                 <Image
                   src="/logo.jpg"
                   alt="LMC Pharmacy Logo"
@@ -53,7 +54,17 @@ export function Navigation() {
                   className="object-contain rounded-md"
                   priority
                 />
-                </div>
+              </div>
+              {/* Desktop Logo - bigger */}
+              <div className="relative h-12 w-40 hidden sm:block">
+                <Image
+                  src="/logo.jpg"
+                  alt="LMC Pharmacy Logo"
+                  fill
+                  className="object-contain rounded-md"
+                  priority
+                />
+              </div>
             </Link>
           </div>
 

@@ -203,14 +203,6 @@ const formatDate = (dateString: string) => {
                               Xem
                             </Link>
                           </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleDownloadReceipt(order.id)}
-                          >
-                            <Download className="h-4 w-4 mr-1" />
-                            Hóa Đơn
-                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -247,15 +239,6 @@ const formatDate = (dateString: string) => {
                           <Eye className="h-4 w-4 mr-1" />
                           Xem
                         </Link>
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleDownloadReceipt(order.id)}
-                        className="flex-1"
-                      >
-                        <Download className="h-4 w-4 mr-1" />
-                        Hóa Đơn
                       </Button>
                     </div>
                   </div>

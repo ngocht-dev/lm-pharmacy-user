@@ -204,19 +204,6 @@ export function ProductFilters({
                 </div>
               </div>
             )}
-
-            {/* Stock Status */}
-            <div>
-              <h3 className="font-medium mb-3 text-sm">Tình Trạng</h3>
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <Badge variant="default" className="text-xs">Còn Hàng</Badge>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Badge variant="destructive" className="text-xs">Hết Hàng</Badge>
-                </div>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </div>

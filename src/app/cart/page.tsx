@@ -48,7 +48,7 @@ export default function CartPage() {
                 Thêm một số sản phẩm vào giỏ hàng để bắt đầu
               </p>
               <Button asChild className="text-sm sm:text-base px-4 sm:px-6">
-                <Link href="/products">Tiếp Tục Mua Sắm</Link>
+                <Link href="/products">Tiếp Tục Đặt Hàng</Link>
               </Button>
             </CardContent>
           </Card>
@@ -272,7 +272,7 @@ export default function CartPage() {
                     {isAuthenticated ? 'Tiến Hành Thanh Toán' : 'Đăng Nhập Để Thanh Toán'}
                   </Button>
                   <Button variant="outline" className="w-full text-sm sm:text-base h-9 sm:h-10" asChild>
-                    <Link href="/products">Tiếp Tục Mua Sắm</Link>
+                    <Link href="/products">Tiếp Tục Đặt Hàng</Link>
                   </Button>
                 </div>
               </CardContent>
