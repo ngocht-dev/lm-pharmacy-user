@@ -1,5 +1,5 @@
 // Base types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   data?: T;
   message?: string;
   success: boolean;
