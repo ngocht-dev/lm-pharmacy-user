@@ -30,7 +30,9 @@ import {
   Receipt
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { formatVND } from '@/lib/utils/currency';
+import { getProductImageUrl } from '@/lib/utils/product';
 import { toast } from 'sonner';
 
 export default function OrderDetailPage() {
@@ -236,14 +238,35 @@ export default function OrderDetailPage() {
                       {order.items.map((item, index) => (
                         <TableRow key={index}>
                           <TableCell>
-                            <div className="font-medium">
-                              {item.product?.name || `Sản phẩm #${item.productId}`}
-                            </div>
-                            {item.product?.barcode && (
-                              <div className="text-sm text-gray-500 mt-1">
-                                Mã vạch: {item.product.barcode}
+                            <div className="flex items-center gap-3">
+                              {/* Product Image */}
+                              <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg">
+                                {item.product && getProductImageUrl(item.product) ? (
+                                  <Image
+                                    src={getProductImageUrl(item.product)!}
+                                    alt={item.product.name}
+                                    width={48}
+                                    height={48}
+                                    className="w-full h-full object-cover rounded-lg"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <Package className="h-5 w-5 text-gray-400" />
+                                  </div>
+                                )}
                               </div>
-                            )}
+                              {/* Product Info */}
+                              <div>
+                                <div className="font-medium">
+                                  {item.product?.name || `Sản phẩm #${item.productId}`}
+                                </div>
+                                {item.product?.barcode && (
+                                  <div className="text-sm text-gray-500 mt-1">
+                                    Mã vạch: {item.product.barcode}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
                           </TableCell>
                           <TableCell className="text-center">
                             {item.quantity}
@@ -264,22 +287,41 @@ export default function OrderDetailPage() {
                 <div className="sm:hidden space-y-4">
                   {order.items.map((item, index) => (
                     <Card key={index} className="p-4 bg-gray-50">
-                      <div className="space-y-2">
-                        <div className="font-medium text-sm">
-                          {item.product?.name || `Sản phẩm #${item.productId}`}
+                      <div className="flex items-start gap-3">
+                        {/* Product Image */}
+                        <div className="flex-shrink-0 w-16 h-16 bg-white rounded-lg border">
+                          {item.product && getProductImageUrl(item.product) ? (
+                            <Image
+                              src={getProductImageUrl(item.product)!}
+                              alt={item.product.name}
+                              width={64}
+                              height={64}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Package className="h-6 w-6 text-gray-400" />
+                            </div>
+                          )}
                         </div>
-                        {item.product?.barcode && (
-                          <div className="text-xs text-gray-500">
-                            Mã vạch: {item.product.barcode}
+                        {/* Product Info */}
+                        <div className="flex-1 space-y-2">
+                          <div className="font-medium text-sm">
+                            {item.product?.name || `Sản phẩm #${item.productId}`}
                           </div>
-                        )}
-                        <div className="flex justify-between items-center text-sm">
-                          <span>Số lượng: {item.quantity}</span>
-                          <span>{formatVND(item.unit_price)}</span>
-                        </div>
-                        <div className="flex justify-between items-center font-medium">
-                          <span>Thành tiền:</span>
-                          <span>{formatVND(item.total_price)}</span>
+                          {item.product?.barcode && (
+                            <div className="text-xs text-gray-500">
+                              Mã vạch: {item.product.barcode}
+                            </div>
+                          )}
+                          <div className="flex justify-between items-center text-sm">
+                            <span>Số lượng: {item.quantity}</span>
+                            <span>{formatVND(item.unit_price)}</span>
+                          </div>
+                          <div className="flex justify-between items-center font-medium">
+                            <span>Thành tiền:</span>
+                            <span>{formatVND(item.total_price)}</span>
+                          </div>
                         </div>
                       </div>
                     </Card>
