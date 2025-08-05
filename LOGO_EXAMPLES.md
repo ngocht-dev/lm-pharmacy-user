@@ -6,7 +6,7 @@
   <div className="relative h-10 w-32 sm:h-12 sm:w-40">
     <Image
       src="/images/logo.svg"
-      alt="LM Pharmacy"
+      alt="LMC Pharmacy"
       fill
       className="object-contain"
       priority
@@ -21,13 +21,13 @@
   <div className="relative h-8 w-8 sm:h-10 sm:w-10">
     <Image
       src="/images/logo.svg"
-      alt="LM Pharmacy Logo"
+      alt="LMC Pharmacy Logo"
       fill
       className="object-contain"
       priority
     />
   </div>
-  <span className="text-lg sm:text-xl font-bold text-gray-900">LM Pharmacy</span>
+  <span className="text-lg sm:text-xl font-bold text-gray-900">LMC Pharmacy</span>
 </Link>
 ```
 
@@ -37,14 +37,14 @@
   <div className="relative h-12 w-12 sm:h-14 sm:w-14">
     <Image
       src="/images/logo.svg"
-      alt="LM Pharmacy Logo"
+      alt="LMC Pharmacy Logo"
       fill
       className="object-contain"
       priority
     />
   </div>
   <div className="flex flex-col">
-    <span className="text-lg sm:text-xl font-bold text-gray-900">LM Pharmacy</span>
+    <span className="text-lg sm:text-xl font-bold text-gray-900">LMC Pharmacy</span>
     <span className="text-xs text-gray-600 hidden sm:block">Your Health Partner</span>
   </div>
 </Link>

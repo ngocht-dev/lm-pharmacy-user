@@ -16,8 +16,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LM Pharmacy - Your Trusted Healthcare Partner",
-  description: "Browse and order medicines online from LM Pharmacy. Fast delivery, quality products, and excellent customer service.",
+  title: "LMC Pharmacy - Chuyên phân phối sỉ Kẹo Cốm",
+  description: "LMC Pharco chuyên phân phối sỉ Kẹo Cốm - Hoá Mỹ Phẩm - Dụng Cụ Y Tế (Tanaphar, Dophaco) - Dầu, Cao Xoa.",
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({

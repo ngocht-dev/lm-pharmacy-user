@@ -1,7 +1,7 @@
 # Responsive Design Implementation Guide
 
 ## Overview
-This document outlines the comprehensive responsive design fixes implemented across the LM Pharmacy website to ensure optimal user experience on all device sizes.
+This document outlines the comprehensive responsive design fixes implemented across the LMC Pharmacy website to ensure optimal user experience on all device sizes.
 
 ## Key Responsive Breakpoints
 - **Mobile**: `< 640px` (sm)

@@ -48,7 +48,7 @@ export default function LoginPage() {
         <div className="text-center">
           <Link href="/" className="flex items-center justify-center space-x-2 mb-4">
             <Heart className="h-10 w-10 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">LM Pharmacy</span>
+            <span className="text-2xl font-bold text-gray-900">LMC Pharmacy</span>
           </Link>
           <h2 className="text-xl text-gray-600">Chào mừng bạn trở lại</h2>
         </div>
