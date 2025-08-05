@@ -1,0 +1,16 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="#F3F4F6"/>
+  
+  <!-- Package icon -->
+  <g transform="translate(75, 75)">
+    <rect x="5" y="15" width="40" height="30" rx="2" fill="#9CA3AF" stroke="#6B7280" stroke-width="1"/>
+    <rect x="15" y="10" width="20" height="5" rx="1" fill="#6B7280"/>
+    <rect x="10" y="25" width="30" height="1" fill="#6B7280"/>
+    <rect x="10" y="30" width="30" height="1" fill="#6B7280"/>
+    <rect x="10" y="35" width="30" height="1" fill="#6B7280"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="100" y="130" text-anchor="middle" fill="#6B7280" font-family="system-ui" font-size="12">No Image</text>
+</svg>

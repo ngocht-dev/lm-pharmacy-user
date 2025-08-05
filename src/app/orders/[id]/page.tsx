@@ -33,6 +33,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatVND } from '@/lib/utils/currency';
 import { getProductImageUrl } from '@/lib/utils/product';
+import { ProductImage } from '@/components/ui/product-image';
 import { toast } from 'sonner';
 
 export default function OrderDetailPage() {
@@ -240,20 +241,14 @@ export default function OrderDetailPage() {
                           <TableCell>
                             <div className="flex items-center gap-3">
                               {/* Product Image */}
-                              <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg">
-                                {item.product && getProductImageUrl(item.product) ? (
-                                  <Image
-                                    src={getProductImageUrl(item.product)!}
-                                    alt={item.product.name}
-                                    width={48}
-                                    height={48}
-                                    className="w-full h-full object-cover rounded-lg"
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center">
-                                    <Package className="h-5 w-5 text-gray-400" />
-                                  </div>
-                                )}
+                              <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
+                                <ProductImage
+                                  src={item.product ? getProductImageUrl(item.product) : null}
+                                  alt={item.product?.name || `Sản phẩm #${item.productId}`}
+                                  width={48}
+                                  height={48}
+                                  className="w-full h-full object-cover rounded-lg"
+                                />
                               </div>
                               {/* Product Info */}
                               <div>
@@ -289,20 +284,14 @@ export default function OrderDetailPage() {
                     <Card key={index} className="p-4 bg-gray-50">
                       <div className="flex items-start gap-3">
                         {/* Product Image */}
-                        <div className="flex-shrink-0 w-16 h-16 bg-white rounded-lg border">
-                          {item.product && getProductImageUrl(item.product) ? (
-                            <Image
-                              src={getProductImageUrl(item.product)!}
-                              alt={item.product.name}
-                              width={64}
-                              height={64}
-                              className="w-full h-full object-cover rounded-lg"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <Package className="h-6 w-6 text-gray-400" />
-                            </div>
-                          )}
+                        <div className="flex-shrink-0 w-16 h-16 bg-white rounded-lg border overflow-hidden">
+                          <ProductImage
+                            src={item.product ? getProductImageUrl(item.product) : null}
+                            alt={item.product?.name || `Sản phẩm #${item.productId}`}
+                            width={64}
+                            height={64}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
                         </div>
                         {/* Product Info */}
                         <div className="flex-1 space-y-2">

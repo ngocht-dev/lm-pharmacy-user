@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatVND } from '@/lib/utils/currency';
 import { getProductImageUrl } from '@/lib/utils/product';
+import { ProductImage } from '@/components/ui/product-image';
 
 export default function CartPage() {
   const { items, total, updateQuantity, removeItem, clearCart } = useCart();
@@ -90,20 +91,14 @@ export default function CartPage() {
                       {/* Mobile Layout - Stacked */}
                       <div className="flex items-center gap-3 sm:hidden">
                         {/* Product Image */}
-                        <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg">
-                          {getProductImageUrl(item.product) ? (
-                            <Image
-                              src={getProductImageUrl(item.product)!}
-                              alt={item.product.name}
-                              width={48}
-                              height={48}
-                              className="w-full h-full object-cover rounded-lg"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <ShoppingBag className="h-5 w-5 text-gray-400" />
-                            </div>
-                          )}
+                        <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg overflow-hidden">
+                          <ProductImage
+                            src={getProductImageUrl(item.product)}
+                            alt={item.product.name}
+                            width={48}
+                            height={48}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
                         </div>
 
                         {/* Product Details - Mobile */}
@@ -174,20 +169,14 @@ export default function CartPage() {
                       {/* Desktop Layout - Hidden on mobile */}
                       <div className="hidden sm:flex sm:items-center sm:space-x-4 sm:w-full">
                         {/* Product Image */}
-                        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg">
-                          {getProductImageUrl(item.product) ? (
-                            <Image
-                              src={getProductImageUrl(item.product)!}
-                              alt={item.product.name}
-                              width={64}
-                              height={64}
-                              className="w-full h-full object-cover rounded-lg"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <ShoppingBag className="h-6 w-6 text-gray-400" />
-                            </div>
-                          )}
+                        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                          <ProductImage
+                            src={getProductImageUrl(item.product)}
+                            alt={item.product.name}
+                            width={64}
+                            height={64}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
                         </div>
 
                         {/* Product Details */}

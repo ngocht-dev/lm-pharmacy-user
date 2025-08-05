@@ -21,6 +21,7 @@ import { CustomerType, SaleMethod, CreateOrderDto } from '@/types/api';
 import { CheckCircle, Package, CreditCard, Truck } from 'lucide-react';
 import { formatVND } from '@/lib/utils/currency';
 import { getProductImageUrl } from '@/lib/utils/product';
+import { ProductImage } from '@/components/ui/product-image';
 import Image from 'next/image';
 import { toast } from 'sonner';
 
@@ -193,20 +194,14 @@ export default function CheckoutPage() {
                                                 <div className="space-y-2">
                                                     {/* Product Image and Name */}
                                                     <div className="flex items-center gap-3">
-                                                        <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-lg border">
-                                                            {getProductImageUrl(item.product) ? (
-                                                                <Image
-                                                                    src={getProductImageUrl(item.product)!}
-                                                                    alt={item.product.name}
-                                                                    width={64}
-                                                                    height={64}
-                                                                    className="w-full h-full object-cover rounded-lg"
-                                                                />
-                                                            ) : (
-                                                                <div className="w-full h-full flex items-center justify-center">
-                                                                    <Package className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />
-                                                                </div>
-                                                            )}
+                                                        <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-lg border overflow-hidden">
+                                                            <ProductImage
+                                                                src={getProductImageUrl(item.product)}
+                                                                alt={item.product.name}
+                                                                width={64}
+                                                                height={64}
+                                                                className="w-full h-full object-cover rounded-lg"
+                                                            />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
                                                             <div className="font-medium text-sm sm:text-base text-gray-900">

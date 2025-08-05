@@ -1,14 +1,14 @@
 'use client';
 
-import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/cart-context';
 import type { Product } from '@/types/api';
-import { ShoppingCart, Package } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { formatVND } from '@/lib/utils/currency';
 import { getProductImageUrl } from '@/lib/utils/product';
+import { ProductImage } from '@/components/ui/product-image';
 
 interface ProductCardProps {
   product: Product;
@@ -22,24 +22,17 @@ export function ProductCard({ product }: ProductCardProps) {
     addItem(product, 1);
   };
 
-  const imageUrl = getProductImageUrl(product);
-
   return (
     <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
       <CardHeader className="pb-2">
-        <div className="aspect-square relative bg-gray-100 rounded-lg mb-2">
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={product.name}
-              fill
-              className="object-cover rounded-lg"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <Package className="h-12 w-12 text-gray-400" />
-            </div>
-          )}
+        <div className="aspect-square relative bg-gray-100 rounded-lg mb-2 overflow-hidden">
+          <ProductImage
+            src={getProductImageUrl(product)}
+            alt={product.name}
+            width={200}
+            height={200}
+            className="w-full h-full object-cover rounded-lg"
+          />
         </div>
         <div className="space-y-1">
           <h3 className="font-semibold text-sm line-clamp-2">{product.name}</h3>
