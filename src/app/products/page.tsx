@@ -106,8 +106,8 @@ export default function ProductsPage() {
             <Navigation />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                {/* Page Header */}
-                <div className="mb-6 sm:mb-8">
+                {/* Sticky Page Header & Search Bar */}
+                <div className="mb-6 sm:mb-8 sticky top-0 z-30 bg-gray-50 pt-2 pb-2 border-b border-gray-100">
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Sản Phẩm</h1>
 
                     {/* Search Bar - Responsive Layout */}
@@ -124,7 +124,6 @@ export default function ProductsPage() {
                                 <Search className="h-4 w-4" />
                             </Button>
                         </form>
-                        
                         {/* Filter Summary for Mobile */}
                         <div className="sm:hidden">
                             {selectedCategories.length > 0 && (
@@ -147,8 +146,8 @@ export default function ProductsPage() {
                 </div>
 
                 <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
-                    {/* Filters Section */}
-                    <div className="lg:w-64 flex-shrink-0">
+                    {/* Filters Section (now always rendered, ProductFilters handles its own responsive display) */}
+                    <div className="lg:w-64 flex-shrink-0 sticky top-[135px] z-20 self-start">
                         <ProductFilters
                             categories={categories}
                             selectedCategories={selectedCategories}

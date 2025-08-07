@@ -56,7 +56,7 @@ export function ProductFilters({
   return (
     <>
       {/* Mobile Filter (Dropdown) */}
-      <div className="lg:hidden">
+      <div className="lg:hidden sticky top-[56px] z-30 backdrop-blur shadow-sm transition-shadow">
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
           <DropdownMenuTrigger asChild>
             <Button 
@@ -103,7 +103,7 @@ export function ProductFilters({
                   onCheckedChange={() => handleCategoryToggle(category.id)}
                   className="cursor-pointer py-2 px-3"
                 >
-                  <span className="truncate text-sm">{category.name}</span>
+                  <span className="truncate text-sm ml-5">{category.name}</span>
                 </DropdownMenuCheckboxItem>
               ))}
             </div>
@@ -112,7 +112,7 @@ export function ProductFilters({
 
         {/* Selected Categories Display for Mobile */}
         {selectedCategories.length > 0 && (
-          <div className="mt-3">
+          <div className="mt-3 px-4 pb-3">
             <div className="text-xs text-gray-500 mb-2">Danh mục đã chọn:</div>
             <div className="flex flex-wrap gap-2">
               {selectedCategories.map((categoryId) => {
@@ -158,7 +158,7 @@ export function ProductFilters({
               )}
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 flex-col">
             {/* Categories */}
             <div>
               <h3 className="font-medium mb-3 text-sm">Danh Mục</h3>
@@ -195,8 +195,8 @@ export function ProductFilters({
 
             {/* Selected Categories Count */}
             {selectedCategories.length > 0 && (
-              <div className="pt-2 border-t">
-                <div className="flex items-center justify-between text-sm">
+              <div className="pt-2 border-t flex items-center justify-between w-full py-6">
+                <div className="flex items-center justify-between text-sm w-full">
                   <span className="text-muted-foreground">Đã chọn:</span>
                   <Badge variant="secondary" className="text-xs">
                     {selectedCategories.length} danh mục
