@@ -56,7 +56,7 @@ export function ProductFilters({
   return (
     <>
       {/* Mobile Filter (Dropdown) */}
-      <div className="lg:hidden sticky top-[56px] z-30 backdrop-blur shadow-sm transition-shadow">
+      <div className="lg:hidden ">
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
           <DropdownMenuTrigger asChild>
             <Button 
@@ -78,7 +78,10 @@ export function ProductFilters({
               </div>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-72 max-h-80 overflow-y-auto">
+          <DropdownMenuContent 
+            align="start" 
+            className="sticky top-[56px] z-30 backdrop-blur shadow-sm transition-shadow w-72 max-h-80 overflow-y-auto"
+          >
             <div className="p-3">
               <div className="flex items-center justify-between mb-3">
                 <span className="font-medium text-sm">Danh mục sản phẩm</span>
@@ -111,7 +114,7 @@ export function ProductFilters({
         </DropdownMenu>
 
         {/* Selected Categories Display for Mobile */}
-        {selectedCategories.length > 0 && (
+        {/* {selectedCategories.length > 0 && (
           <div className="mt-3 px-4 pb-3">
             <div className="text-xs text-gray-500 mb-2">Danh mục đã chọn:</div>
             <div className="flex flex-wrap gap-2">
@@ -137,7 +140,7 @@ export function ProductFilters({
               })}
             </div>
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Desktop Filter (Card) */}
