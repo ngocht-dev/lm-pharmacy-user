@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LMC Pharmacy - Chuyên phân phối sỉ Kẹo Cốm",
+  title: "LMC Pharco",
   description: "LMC Pharco chuyên phân phối sỉ Kẹo Cốm - Hoá Mỹ Phẩm - Dụng Cụ Y Tế (Tanaphar, Dophaco) - Dầu, Cao Xoa.",
   icons: {
     icon: '/favicon.ico',
