@@ -30,7 +30,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
+      <Card className="h-full flex flex-col hover:shadow-lg transition-shadow pb-0" style={{ paddingBottom: 0, gap: 0 }}>
         <CardHeader className="pb-2">
           <div
             className="aspect-square relative bg-gray-100 rounded-lg mb-2 overflow-hidden group cursor-zoom-in"
@@ -50,7 +50,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <p className="text-xs text-gray-600">{product.category.name}</p>
           </div>
         </CardHeader>
-        <CardContent className="flex-1 pb-2">
+        <CardContent className="flex-1 pb-2 flex items-end">
           <div className="flex items-center justify-between mb-2 w-full">
             <span className="text-lg font-bold text-orange-600">
               {formatVND(product.sale_price)}

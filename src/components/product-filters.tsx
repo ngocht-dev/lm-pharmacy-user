@@ -198,7 +198,7 @@ export function ProductFilters({
 
             {/* Selected Categories Count */}
             {selectedCategories.length > 0 && (
-              <div className="pt-2 border-t flex items-center justify-between w-full py-6">
+              <div className="pt-2 border-t flex items-center justify-between w-full">
                 <div className="flex items-center justify-between text-sm w-full">
                   <span className="text-muted-foreground">Đã chọn:</span>
                   <Badge variant="secondary" className="text-xs">
