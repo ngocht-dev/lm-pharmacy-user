@@ -46,10 +46,14 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         {/* Logo and Title */}
         <div className="text-center">
-          <Link href="/" className="flex items-center justify-center space-x-2 mb-4">
-            <Heart className="h-10 w-10 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">LMC Pharmacy</span>
-          </Link>
+            <Link href="/" className="flex flex-col items-center justify-center mb-4">
+              <img
+              src="/logo.png"
+              alt="LMC Pharmacy Logo"
+              className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16"
+              />
+              <span className="text-2xl font-bold text-gray-900">LMC Pharco</span>
+            </Link>
           <h2 className="text-xl text-gray-600">Chào mừng bạn trở lại</h2>
         </div>
 

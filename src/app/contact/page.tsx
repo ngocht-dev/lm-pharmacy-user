@@ -13,7 +13,8 @@ import type { CreateMessageDto } from '@/types/api';
 
 export default function ContactPage() {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [identity, setIdentity] = useState('');
   const [phone, setPhone] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
@@ -27,21 +28,24 @@ export default function ContactPage() {
     setIsSubmitting(true);
 
     try {
-      const messageData: CreateMessageDto = {
+      const messageData: CreateMessageDto & { address?: string; identity?: string } = {
         full_name: name,
-        email: email,
+        email: '',
         phone_number: phone || undefined,
         subject: subject,
-        message: message
+        message: message,
+        address: address || undefined,
+        identity: identity || undefined,
       };
 
       const response = await messageService.createMessage(messageData);
-      
+
       if (response.success) {
         console.log('Message sent successfully:', response.data);
         setSuccess(true);
         setName('');
-        setEmail('');
+        setAddress('');
+        setIdentity('');
         setPhone('');
         setSubject('');
         setMessage('');
@@ -51,7 +55,7 @@ export default function ContactPage() {
     } catch (error) {
       console.error('Error sending message:', error);
       setError(
-        error instanceof Error 
+        error instanceof Error
           ? `Có lỗi xảy ra: ${error.message}`
           : 'Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại.'
       );
@@ -63,7 +67,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Liên Hệ Với Chúng Tôi</h1>
@@ -85,7 +89,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900">Địa Chỉ</h3>
                     <p className="text-gray-600">
-                       Số 1014 Phạm Văn Đồng, Phường Hiệp Bình, Thành phố Hồ Chí Minh
+                      Số 1014 Phạm Văn Đồng, Phường Hiệp Bình, Thành phố Hồ Chí Minh
                     </p>
                   </div>
                 </div>
@@ -143,9 +147,11 @@ export default function ContactPage() {
                     </Alert>
                   )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+                  <div className="grid grid-cols-1">
                     <div>
-                      <Label htmlFor="name">Họ và Tên *</Label>
+                      <Label htmlFor="name">Tên nhà thuốc / phòng khám / cửa hàng *</Label>
                       <Input
                         id="name"
                         type="text"
@@ -155,20 +161,19 @@ export default function ContactPage() {
                         placeholder="Nhập họ và tên của bạn"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="email">Email *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        placeholder="Nhập địa chỉ email"
-                      />
-                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="identity">MST/CCCD</Label>
+                      <Input
+                        id="identity"
+                        type="text"
+                        value={identity}
+                        onChange={(e) => setIdentity(e.target.value)}
+                        placeholder="Nhập mã số định danh hoặc CMND/CCCD"
+                      />
+                    </div>
                     <div>
                       <Label htmlFor="phone">Số Điện Thoại</Label>
                       <Input
@@ -179,18 +184,32 @@ export default function ContactPage() {
                         placeholder="Nhập số điện thoại"
                       />
                     </div>
+                  </div>
+                  <div className="grid grid-cols-1">
                     <div>
-                      <Label htmlFor="subject">Chủ Đề *</Label>
-                      <Input
-                        id="subject"
-                        type="text"
-                        value={subject}
-                        onChange={(e) => setSubject(e.target.value)}
-                        required
-                        placeholder="Nhập chủ đề tin nhắn"
+                      <Label htmlFor="address">Địa chỉ</Label>
+                      <textarea
+                        id="address"
+                        value={address}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAddress(e.target.value)}
+                        rows={3}
+                        placeholder="Nhập địa chỉ liên hệ"
+                        className="flex w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
                       />
                     </div>
                   </div>
+                  <div>
+                    <Label htmlFor="subject">Chủ Đề *</Label>
+                    <Input
+                      id="subject"
+                      type="text"
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      required
+                      placeholder="Nhập chủ đề tin nhắn"
+                    />
+                  </div>
+
 
                   <div>
                     <Label htmlFor="message">Tin Nhắn *</Label>

@@ -48,7 +48,7 @@ export function Navigation() {
               {/* Mobile Logo - smaller */}
               <div className="relative h-8 w-24 sm:hidden">
                 <Image
-                  src="/logo.jpg"
+                  src="/logo.png"
                   alt="LMC Pharmacy Logo"
                   fill
                   className="object-contain rounded-md"
@@ -58,7 +58,7 @@ export function Navigation() {
               {/* Desktop Logo - bigger */}
               <div className="relative h-12 w-40 hidden sm:block">
                 <Image
-                  src="/logo.jpg"
+                  src="/logo.png"
                   alt="LMC Pharmacy Logo"
                   fill
                   className="object-contain rounded-md"
@@ -141,9 +141,6 @@ export function Navigation() {
                 <div className="flex items-center space-x-2">
                   <Button variant="ghost" size="sm" asChild>
                     <Link href="/login">Đăng Nhập</Link>
-                  </Button>
-                  <Button size="sm" asChild>
-                    <Link href="/register">Đăng Ký</Link>
                   </Button>
                 </div>
               )}
