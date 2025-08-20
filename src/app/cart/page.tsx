@@ -107,7 +107,7 @@ export default function CartPage() {
                             {item.product.name}
                           </h3>
                           <p className="text-xs text-gray-500">
-                            {item.product.category.name}
+                            {item.product.category?.name}
                           </p>
                           <p className="text-sm font-medium text-blue-600">
                             {formatVND(item.product.sale_price)}
@@ -185,7 +185,7 @@ export default function CartPage() {
                             {item.product.name}
                           </h3>
                           <p className="text-sm text-gray-500">
-                            {item.product.category.name}
+                            {item.product.category?.name}
                           </p>
                           <p className="text-sm font-medium text-blue-600">
                             {formatVND(item.product.sale_price)}
