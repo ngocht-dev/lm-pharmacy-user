@@ -95,7 +95,7 @@ export default function CheckoutPage() {
                 items: items.map(item => ({
                     product_id: parseInt(item.product.id), // Convert to integer and use correct field name
                     quantity: item.quantity,
-                    unit_price: item.product.sale_price, // Use correct field name
+                    unit_price: Number(item.product.sale_price), // Use correct field name
                 })),
             };
             const response = await orderService.createOrder(orderData);
@@ -117,7 +117,7 @@ export default function CheckoutPage() {
                 toast.dismiss('checkout-loading');
 
                 toast.error('Lỗi khi đặt hàng', {
-                    description: response.error || 'Có lỗi xảy ra khi tạo đơn hàng. Vui lòng thử lại.',
+                    description: 'Có lỗi xảy ra khi tạo đơn hàng. Vui lòng thử lại.',
                     duration: 5000,
                 });
             }
