@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
         hostname: 'cdn-images.kiotviet.vn',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.lmcpharco.vn',
+        pathname: '/**',
+      },
     ],
   },
   eslint: {
