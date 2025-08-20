@@ -87,6 +87,7 @@ export interface ProductSearchParams {
   search?: string;
   category_id?: string;
   category_ids?: string; // Added for multi-select support
+  product_group_ids?: string; // Added for product group support
   vendorId?: string;
   isActive?: boolean;
   page?: number;

@@ -53,11 +53,10 @@ export default function ProductsPage() {
             }
 
             if (selectedCategories.length > 0) {
-                params.category_ids = JSON.stringify(selectedCategories); // Use correct property and type
+                params.product_group_ids = JSON.stringify(selectedCategories); // Use correct property and type
             }
 
             const response = await productService.searchProducts(params);
-            console.log('Product search response:', response); // Debugging log
             if (response.success && response.data) {
                 setProducts(response.data.data);
                 setTotalPages(response.data.lastPage);
