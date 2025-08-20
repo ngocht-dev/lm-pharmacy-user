@@ -30,6 +30,11 @@ const nextConfig: NextConfig = {
         hostname: 'api.lmcpharco.vn',
         pathname: '/**',
       },
+       {
+        protocol: 'https',
+        hostname: 'cdn.lmcpharco.vn',
+        pathname: '/**',
+      },
     ],
   },
   eslint: {
