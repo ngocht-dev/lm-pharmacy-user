@@ -21,7 +21,7 @@ export const productService = {
     limit: number;
     lastPage: number;
   }>> {
-    return apiClient.get(API_ENDPOINTS.PRODUCTS_SEARCH, params);
+    return apiClient.get(API_ENDPOINTS.PRODUCTS_SEARCH, params as Record<string, unknown>);
   },
 
   // Get product by ID

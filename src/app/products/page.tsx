@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { productService } from '@/lib/services/products';
 import type { Product, Category, ProductSearchParams } from '@/types/api';
 import { Search, Loader2 } from 'lucide-react';
+import { CategoryType } from '@/lib/constants';
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -27,7 +28,7 @@ export default function ProductsPage() {
         try {
             const response = await productService.getCategories();
             if (response.success && response.data) {
-                setCategories(response.data);
+                setCategories(response.data.filter((category: Category) => category.type === CategoryType.PRODUCT_GROUP));
             }
         } catch (error) {
             console.error('Failed to load categories:', error);
@@ -40,7 +41,7 @@ export default function ProductsPage() {
         } else {
             setLoading(true);
         }
-        
+
         try {
             const params: ProductSearchParams = {
                 page: currentPage,
@@ -52,7 +53,7 @@ export default function ProductsPage() {
             }
 
             if (selectedCategories.length > 0) {
-                params.category_ids = JSON.stringify(selectedCategories)    ; // Use correct property and type
+                params.category_ids = JSON.stringify(selectedCategories); // Use correct property and type
             }
 
             const response = await productService.searchProducts(params);
@@ -198,10 +199,9 @@ export default function ProductsPage() {
                                                 </div>
                                             </div>
                                         )}
-                                        <div 
-                                            className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 ${
-                                                paginationLoading ? 'opacity-50' : ''
-                                            }`}
+                                        <div
+                                            className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 ${paginationLoading ? 'opacity-50' : ''
+                                                }`}
                                         >
                                             {products.map((product) => (
                                                 <ProductCard key={product.id} product={product} />

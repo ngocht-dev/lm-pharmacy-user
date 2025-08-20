@@ -1,3 +1,5 @@
+import { CategoryType } from "@/lib/constants";
+
 // Base types
 export interface ApiResponse<T = unknown> {
   data?: T;
@@ -54,6 +56,7 @@ export interface Vendor {
 export interface Category {
   id: string;
   name: string;
+  type: CategoryType;
   description?: string;
   created_at: string;
   updated_at: string;
