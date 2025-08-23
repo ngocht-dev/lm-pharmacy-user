@@ -207,9 +207,9 @@ export default function CheckoutPage() {
                                                             <div className="font-medium text-sm sm:text-base text-gray-900">
                                                                 {item.product.name}
                                                             </div>
-                                                            <div className="text-xs sm:text-sm text-gray-500 mt-1">
+                                                            {/* <div className="text-xs sm:text-sm text-gray-500 mt-1">
                                                                 {item.product.category?.name}
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                                     </div>
                                                     

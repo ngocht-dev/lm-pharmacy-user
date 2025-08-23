@@ -47,7 +47,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
           <div className="space-y-1">
             <h3 className="font-semibold text-sm">{product.name}</h3>
-            <p className="text-xs text-gray-600">{product.category?.name}</p>
+            {/* <p className="text-xs text-gray-600">{product.category?.name}</p> */}
           </div>
         </CardHeader>
         <CardContent className="flex-1 pb-2 flex items-end">

@@ -106,9 +106,9 @@ export default function CartPage() {
                           <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
                             {item.product.name}
                           </h3>
-                          <p className="text-xs text-gray-500">
+                          {/* <p className="text-xs text-gray-500">
                             {item.product.category?.name}
-                          </p>
+                          </p> */}
                           <p className="text-sm font-medium text-blue-600">
                             {formatVND(item.product.sale_price)}
                           </p>
@@ -184,9 +184,9 @@ export default function CartPage() {
                           <h3 className="text-sm font-medium text-gray-900 truncate">
                             {item.product.name}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          {/* <p className="text-sm text-gray-500">
                             {item.product.category?.name}
-                          </p>
+                          </p> */}
                           <p className="text-sm font-medium text-blue-600">
                             {formatVND(item.product.sale_price)}
                           </p>
