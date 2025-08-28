@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Navigation } from '@/components/navigation';
 import { ProductCard } from '@/components/product-card';
 import { ProductFilters } from '@/components/product-filters';
-import { ProductPagination } from '@/components/product-pagination';
 import { FixedCartButton } from '@/components/fixed-cart-button';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,12 +16,13 @@ export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
-    const [paginationLoading, setPaginationLoading] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [lastPage, setTotalPages] = useState(1);
+    const [hasMorePages, setHasMorePages] = useState(true);
     const [total, setTotal] = useState(0);
+    const loadMoreRef = useRef<HTMLDivElement>(null);
 
     const loadCategories = async () => {
         try {
@@ -35,19 +35,22 @@ export default function ProductsPage() {
         }
     };
 
-    const loadProducts = useCallback(async (isPageChange = false) => {
-        if (isPageChange) {
-            setPaginationLoading(true);
+    const loadProducts = useCallback(async (isLoadMore = false) => {
+        console.log('Loading products, isLoadMore:', isLoadMore, currentPage);
+        if (isLoadMore) {
+            setLoadingMore(true);
         } else {
             setLoading(true);
+            setProducts([]); // Clear products when starting fresh
+            setCurrentPage(1);
         }
 
         try {
             const params: ProductSearchParams = {
-                page: currentPage,
+                page: isLoadMore ? currentPage + 1 : 1,
                 limit: 12,
             };
-
+            console.log('Loading products with params:', params);
             if (searchQuery) {
                 params.search = searchQuery;
             }
@@ -58,15 +61,25 @@ export default function ProductsPage() {
 
             const response = await productService.searchProducts(params);
             if (response.success && response.data) {
-                setProducts(response.data.data);
-                setTotalPages(response.data.lastPage);
-                setTotal(response.data.total);
+                if (response.data) {
+                    if (isLoadMore) {
+                        setProducts(prev => [...prev, ...response?.data?.data || []]);
+                    } else {
+                        setProducts(response.data.data);
+                    }
+                    setHasMorePages(response.data.page < response.data.lastPage);
+                    setTotal(response.data.total);
+
+                    if (isLoadMore) {
+                        setCurrentPage(prev => prev + 1);
+                    }
+                }
             }
         } catch (error) {
             console.error('Failed to load products:', error);
         } finally {
             setLoading(false);
-            setPaginationLoading(false);
+            setLoadingMore(false);
         }
     }, [currentPage, searchQuery, selectedCategories]); // Dependencies that should trigger reload
 
@@ -77,28 +90,34 @@ export default function ProductsPage() {
 
     // Load products when filters change
     useEffect(() => {
-        const isPageChange = currentPage > 1;
-        loadProducts(isPageChange);
-    }, [loadProducts]); // Now loadProducts is memoized, so this won't cause infinite loops
+        loadProducts(false);
+    }, [searchQuery, selectedCategories]); // Load fresh when search or filters change
+
+    // Infinite scroll effect
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMorePages && !loading && !loadingMore) {
+                    loadProducts(true);
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (loadMoreRef.current) {
+            observer.observe(loadMoreRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, [hasMorePages, loading, loadingMore, loadProducts]);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        setCurrentPage(1);
-        // loadProducts will be called automatically by useEffect when currentPage changes
+        // loadProducts will be called automatically by useEffect when searchQuery changes
     };
 
     const handleCategoriesChange = (categoryIds: string[]) => {
         setSelectedCategories(categoryIds);
-        setCurrentPage(1);
-    };
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        // Scroll to top of products section smoothly
-        const productsSection = document.querySelector('.products-grid');
-        if (productsSection) {
-            productsSection.scrollIntoView({ behavior: 'smooth' });
-        }
     };
 
     return (
@@ -188,19 +207,10 @@ export default function ProductsPage() {
                                 </div>
                             ) : products.length > 0 ? (
                                 <>
-                                    {/* Products Grid with Loading Overlay */}
+                                    {/* Products Grid */}
                                     <div className="relative">
-                                        {paginationLoading && (
-                                            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex items-center justify-center">
-                                                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-lg">
-                                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                                    <span className="text-sm">Đang tải...</span>
-                                                </div>
-                                            </div>
-                                        )}
                                         <div
-                                            className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 ${paginationLoading ? 'opacity-50' : ''
-                                                }`}
+                                            className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
                                         >
                                             {products.map((product) => (
                                                 <ProductCard key={product.id} product={product} />
@@ -208,14 +218,26 @@ export default function ProductsPage() {
                                         </div>
                                     </div>
 
-                                    {/* Pagination */}
-                                    <ProductPagination
-                                        currentPage={currentPage}
-                                        totalPages={lastPage}
-                                        total={total}
-                                        onPageChange={handlePageChange}
-                                        disabled={paginationLoading}
-                                    />
+                                    {/* Load More Trigger & Loading */}
+                                    {hasMorePages && (
+                                        <div ref={loadMoreRef} className="flex justify-center py-8">
+                                            {loadingMore ? (
+                                                <div className="flex items-center gap-2">
+                                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                                    <span className="text-sm text-gray-600">Đang tải thêm sản phẩm...</span>
+                                                </div>
+                                            ) : (
+                                                <div className="text-sm text-gray-500">Cuộn xuống để tải thêm</div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* End of Results */}
+                                    {!hasMorePages && products.length > 0 && (
+                                        <div className="text-center py-8">
+                                            <p className="text-sm text-gray-500">Đã hiển thị tất cả {total} sản phẩm</p>
+                                        </div>
+                                    )}
                                 </>
                             ) : (
                                 <div className="text-center py-12 min-h-[400px] flex items-center justify-center">
