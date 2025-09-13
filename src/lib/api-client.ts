@@ -129,11 +129,23 @@ class ApiClient {
       if (!response.ok) {
         // Handle 401 Unauthorized - token might be expired
         if (response.status === 401 && !isRetry) {
+          // If the failing endpoint is the login or refresh endpoint,
+          // do NOT attempt token refresh or redirect to /login. Let
+          // the UI handle the error so it can show an inline message.
+          const isAuthEndpoint = endpoint === API_ENDPOINTS.LOGIN || endpoint === API_ENDPOINTS.REFRESH;
+          if (isAuthEndpoint) {
+            console.log('401 on auth endpoint, returning error to caller instead of redirecting');
+            return {
+              success: false,
+              error: data?.message || `HTTP 401: ${response.statusText}`,
+              data: undefined,
+            };
+          }
+
           console.log('Received 401, attempting token refresh...');
-          
           // Try to refresh the token
           const refreshSuccess = await this.refreshAccessToken();
-          
+
           if (refreshSuccess) {
             // Retry the original request with the new token
             console.log('Token refresh successful, retrying original request...');

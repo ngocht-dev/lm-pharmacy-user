@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import Link from 'next/link';
 import { Heart, Eye, EyeOff } from 'lucide-react';
+import { handleSubmitError } from '@/lib/utils';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -32,7 +33,13 @@ export default function LoginPage() {
       if (result.success) {
         router.push('/');
       } else {
-        setError(result.error || 'Đăng nhập thất bại');
+        setError(handleSubmitError({
+          response: {
+            data: {
+              message: result.error
+            }
+          }
+        }, 'Đăng nhập thất bại'));
       }
     } catch (error) {
       setError('Đã xảy ra lỗi không mong muốn');
@@ -46,14 +53,14 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         {/* Logo and Title */}
         <div className="text-center">
-            <Link href="/" className="flex flex-col items-center justify-center mb-4">
-              <img
+          <Link href="/" className="flex flex-col items-center justify-center mb-4">
+            <img
               src="/logo.png"
               alt="LMC Pharmacy Logo"
               className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16"
-              />
-              <span className="text-2xl font-bold text-gray-900">LMC Pharco</span>
-            </Link>
+            />
+            <span className="text-2xl font-bold text-gray-900">LMC Pharco</span>
+          </Link>
           <h2 className="text-xl text-gray-600">Chào mừng bạn trở lại</h2>
         </div>
 
