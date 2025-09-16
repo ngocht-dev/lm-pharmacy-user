@@ -10,20 +10,24 @@ export const useVisitTracking = () => {
     const trackVisit = async () => {
       try {
         // Check if we already tracked today using localStorage
-        const lastTracked = localStorage.getItem('lastVisitTracked');
-        const today = new Date().toDateString();
+        // const lastTracked = localStorage.getItem('lastVisitTracked');
+        // const today = new Date().toDateString();
 
-        if (lastTracked === today) {
-          return; // Already tracked today
-        }
+        // if (lastTracked === today) {
+        //   return; // Already tracked today
+        // }
 
-        const response = await apiClient.post<VisitResponse>('/users/visit', {
-            path: window.location.pathname,
+        await apiClient.post<VisitResponse>('/users/visit', {
+          path: window.location.pathname,
         });
 
-        if (response.success && response.data?.firstVisitToday) {
-          localStorage.setItem('lastVisitTracked', today);
-        }
+        // const response = await apiClient.post<VisitResponse>('/users/visit', {
+        //     path: window.location.pathname,
+        // });
+
+        // if (response.success && response.data?.firstVisitToday) {
+        //   localStorage.setItem('lastVisitTracked', today);
+        // }
       } catch (error) {
         console.error('Failed to track visit:', error);
       }
