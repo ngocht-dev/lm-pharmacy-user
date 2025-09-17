@@ -67,6 +67,10 @@ export interface Product {
   name: string;
   description?: string;
   category: Category;
+  product_status?: {
+    id: string;
+    name: string;
+  };
   categoryId: string;
   vendor: Vendor;
   vendorId: string;

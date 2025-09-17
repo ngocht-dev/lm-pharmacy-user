@@ -30,7 +30,23 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <Card className="h-full flex flex-col hover:shadow-lg transition-shadow pb-0" style={{ paddingBottom: 0, gap: 0 }}>
+      <Card className="h-full flex flex-col hover:shadow-lg transition-shadow pb-0 relative" style={{ paddingBottom: 0, gap: 0 }}>
+        {/* Product Status Badge positioned absolutely in top-left corner */}
+        {product.product_status?.name && (
+          <Badge
+            variant={
+              product.product_status.name.includes('Còn hàng')
+                ? 'default'
+                : product.product_status.name.includes('Hết hàng')
+                ? 'destructive'
+                : 'secondary'
+            }
+            className="absolute top-2 left-2 text-xs px-2 py-0.5 rounded-full shadow-md z-10"
+          >
+            {product.product_status.name}
+          </Badge>
+        )}
+
         <CardHeader className="pb-2">
           <div
             className="aspect-square relative bg-gray-100 rounded-lg mb-2 overflow-hidden group cursor-zoom-in"
@@ -47,7 +63,6 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
           <div className="space-y-1">
             <h3 className="font-semibold text-sm">{product.name}</h3>
-            {/* <p className="text-xs text-gray-600">{product.category?.name}</p> */}
           </div>
         </CardHeader>
         <CardContent className="flex-1 pb-2 flex items-end">
