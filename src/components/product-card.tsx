@@ -35,7 +35,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {product.product_status?.name && (
           <Badge
             variant={
-              product.product_status.name.toLowerCase().includes('còn hàng')
+              product.product_status.name.toLowerCase().includes('giảm giá')
                 ? 'default'
                 : product.product_status.name.toLowerCase().includes('hết hàng')
                 ? 'destructive'
