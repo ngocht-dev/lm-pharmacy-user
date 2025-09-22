@@ -3,6 +3,7 @@
 import { Navigation } from '@/components/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useCart } from '@/contexts/cart-context';
 import { useAuth } from '@/contexts/auth-context';
@@ -19,6 +20,7 @@ export default function CartPage() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
+  console.log('Cart items:', items[0]);
   const handleQuantityChange = (productId: string, newQuantity: number) => {
     if (newQuantity > 0) {
       updateQuantity(productId, newQuantity);
@@ -91,7 +93,7 @@ export default function CartPage() {
                       {/* Mobile Layout - Stacked */}
                       <div className="flex items-center gap-3 sm:hidden">
                         {/* Product Image */}
-                        <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg overflow-hidden">
+                        <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg overflow-hidden relative">
                           <ProductImage
                             src={getProductImageUrl(item.product)}
                             alt={item.product.name}
@@ -99,6 +101,21 @@ export default function CartPage() {
                             height={48}
                             className="w-full h-full object-cover rounded-lg"
                           />
+                          {/* Product Status Badge */}
+                          {item.product.product_status?.name && (
+                            <Badge
+                              variant={
+                                item.product.product_status.name === 'Còn hàng'
+                                  ? 'default'
+                                  : item.product.product_status.name === 'Hết hàng'
+                                  ? 'destructive'
+                                  : 'secondary'
+                              }
+                              className="absolute top-1 left-1 text-xs px-1 py-0.5 rounded-full shadow-md z-10"
+                            >
+                              {item.product.product_status.name}
+                            </Badge>
+                          )}
                         </div>
 
                         {/* Product Details - Mobile */}
@@ -169,7 +186,7 @@ export default function CartPage() {
                       {/* Desktop Layout - Hidden on mobile */}
                       <div className="hidden sm:flex sm:items-center sm:space-x-4 sm:w-full">
                         {/* Product Image */}
-                        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden relative">
                           <ProductImage
                             src={getProductImageUrl(item.product)}
                             alt={item.product.name}
@@ -177,6 +194,21 @@ export default function CartPage() {
                             height={64}
                             className="w-full h-full object-cover rounded-lg"
                           />
+                          {/* Product Status Badge */}
+                          {item.product.product_status?.name && (
+                            <Badge
+                              variant={
+                                item.product.product_status.name === 'Còn hàng'
+                                  ? 'default'
+                                  : item.product.product_status.name === 'Hết hàng'
+                                  ? 'destructive'
+                                  : 'secondary'
+                              }
+                              className="absolute top-1 left-1 text-xs px-1 py-0.5 rounded-full shadow-md z-10"
+                            >
+                              {item.product.product_status.name}
+                            </Badge>
+                          )}
                         </div>
 
                         {/* Product Details */}
