@@ -31,13 +31,15 @@ import {
 } from '@/components/ui/table';
 import { orderService } from '@/lib/services/orders';
 import { useAuth } from '@/contexts/auth-context';
+import { useCart } from '@/contexts/cart-context';
 import type { Order } from '@/types/api';
 import { ORDER_STATUS_LABELS } from '@/types/api';
-import { Package, Download, Eye, Loader2 } from 'lucide-react';
+import { Package, Download, Eye, Loader2, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { set } from 'react-hook-form';
 import { formatVND } from '@/lib/utils/currency';
+import { toast } from 'sonner';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -47,6 +49,7 @@ export default function OrdersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
+  const { addItem } = useCart();
   const router = useRouter();
 
   const loadOrders = async (page: number = 1, status: string = 'all') => {
@@ -119,6 +122,37 @@ export default function OrdersPage() {
       await orderService.downloadReceiptPDF(orderId);
     } catch (error) {
       console.error('Failed to download receipt:', error);
+    }
+  };
+
+  const handleReorder = (order: Order) => {
+    try {
+      let addedCount = 0;
+      let skippedCount = 0;
+      
+      // Add all items from the order to cart
+      order.items.forEach((item) => {
+        if (item.product) {
+          addItem(item.product, item.quantity);
+          addedCount++;
+        } else {
+          skippedCount++;
+        }
+      });
+      
+      if (addedCount > 0) {
+        toast.success(`Đã thêm ${addedCount} sản phẩm vào giỏ hàng`);
+        if (skippedCount > 0) {
+          toast.warning(`${skippedCount} sản phẩm không khả dụng`);
+        }
+        // Navigate to cart
+        router.push('/cart');
+      } else {
+        toast.error('Không có sản phẩm nào khả dụng để đặt lại');
+      }
+    } catch (error) {
+      console.error('Failed to reorder:', error);
+      toast.error('Có lỗi xảy ra khi đặt lại đơn hàng');
     }
   };
 
@@ -278,6 +312,14 @@ const formatDate = (dateString: string) => {
                               Xem
                             </Link>
                           </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            onClick={() => handleReorder(order)}
+                          >
+                            <RotateCcw className="h-4 w-4 mr-1" />
+                            Đặt Lại
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -325,6 +367,15 @@ const formatDate = (dateString: string) => {
                           <Eye className="h-4 w-4 mr-1" />
                           Xem
                         </Link>
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => handleReorder(order)}
+                        className="flex-1"
+                      >
+                        <RotateCcw className="h-4 w-4 mr-1" />
+                        Đặt Lại
                       </Button>
                     </div>
                   </div>
