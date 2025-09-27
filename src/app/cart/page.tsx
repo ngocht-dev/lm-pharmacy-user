@@ -15,7 +15,7 @@ import { formatVND } from '@/lib/utils/currency';
 import { getProductImageUrl } from '@/lib/utils/product';
 import { ProductImage } from '@/components/ui/product-image';
 import { productService } from '@/lib/services/products';
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import type { Product } from '@/types/api';
 
@@ -40,22 +40,23 @@ export default function CartPage() {
   };
 
   const handleRefreshProducts = async () => {
+    console.log('Starting product refresh...', items.length);
     if (items.length === 0) return;
-    
+
     setRefreshing(true);
     try {
       // Get all product IDs from cart items
       const productIds = items.map(item => item.product.id);
       console.log('Refreshing products with IDs:', productIds);
-      
+
       // Fetch all products in a single batch request
       const response = await productService.getProductsByIds(productIds);
       console.log('Batch API response:', response);
-      
+
       if (response.success && response.data) {
         let updatedCount = 0;
         let errorCount = 0;
-        
+
         // Update each product in the cart
         response.data.forEach((product) => {
           try {
@@ -66,7 +67,7 @@ export default function CartPage() {
             errorCount++;
           }
         });
-        
+
         if (updatedCount > 0) {
           toast.success(`Đã cập nhật ${updatedCount} sản phẩm`);
         }
@@ -84,6 +85,10 @@ export default function CartPage() {
       setRefreshing(false);
     }
   };
+
+  useEffect(() => {
+    handleRefreshProducts();
+  }, [items.length]);
 
   if (items.length === 0) {
     return (
@@ -112,7 +117,7 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      
+
       <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
         <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 lg:mb-8">Giỏ Hàng</h1>
 
@@ -148,191 +153,187 @@ export default function CartPage() {
               <CardContent>
                 <div className="space-y-3 sm:space-y-4">
                   {items.map((item) => (
-                    <div
-                      key={item.product.id}
-                      className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 py-3 sm:py-4 border-b last:border-b-0"
-                    >
-                      {/* Mobile Layout - Stacked */}
-                      <div className="flex items-center gap-3 sm:hidden">
-                        {/* Product Image */}
-                        <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg overflow-hidden relative">
-                          <ProductImage
-                            src={getProductImageUrl(item.product)}
-                            alt={item.product.name}
-                            width={48}
-                            height={48}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
-                          {/* Product Status Badge */}
-                          {item.product.product_status?.name && (
-                            <Badge
-                              variant={
-                                item.product.product_status.name === 'Còn hàng'
-                                  ? 'default'
-                                  : item.product.product_status.name === 'Hết hàng'
-                                  ? 'destructive'
-                                  : 'secondary'
-                              }
-                              className="absolute top-1 left-1 text-xs px-1 py-0.5 rounded-full shadow-md z-10"
-                            >
-                              {item.product.product_status.name}
-                            </Badge>
-                          )}
-                        </div>
+                    <Card key={item.product.id} className="p-3 sm:p-4 bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                      <div className="space-y-2">
+                        {/* Mobile Layout - Stacked */}
+                        <div className="flex items-center gap-3 sm:hidden">
+                          {/* Product Image */}
+                          <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg overflow-hidden relative">
+                            <ProductImage
+                              src={getProductImageUrl(item.product)}
+                              alt={item.product.name}
+                              width={48}
+                              height={48}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                            {/* Product Status Badge */}
+                            {item.product.product_status?.name && (
+                              <Badge
+                                variant={
+                                  item.product.product_status.name === 'Còn hàng'
+                                    ? 'default'
+                                    : item.product.product_status.name === 'Hết hàng'
+                                      ? 'destructive'
+                                      : 'secondary'
+                                }
+                                className="absolute top-1 left-1 text-xs px-1 py-0.5 rounded-full shadow-md z-10"
+                              >
+                                {item.product.product_status.name}
+                              </Badge>
+                            )}
+                          </div>
 
-                        {/* Product Details - Mobile */}
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
-                            {item.product.name}
-                          </h3>
-                          {/* <p className="text-xs text-gray-500">
+                          {/* Product Details - Mobile */}
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-sm font-medium text-gray-900 whitespace-normal break-words">
+                              {item.product.name}
+                            </h3>
+                            {/* <p className="text-xs text-gray-500">
                             {item.product.category?.name}
                           </p> */}
-                          <p className="text-sm font-medium text-blue-600">
-                            {formatVND(item.product.sale_price)}
-                          </p>
-                        </div>
+                            <p className="text-sm font-medium text-blue-600">
+                              {formatVND(item.product.sale_price)}
+                            </p>
+                          </div>
 
-                        {/* Remove Button - Mobile */}
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => removeItem(item.product.id)}
-                          className="text-red-600 hover:text-red-700 h-8 w-8"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-
-                      {/* Mobile Quantity and Total */}
-                      <div className="flex items-center justify-between sm:hidden">
-                        {/* Quantity Controls - Mobile */}
-                        <div className="flex items-center gap-2">
+                          {/* Remove Button - Mobile */}
                           <Button
                             size="icon"
-                            variant="outline"
-                            onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
-                            disabled={item.quantity <= 1}
-                            className="h-8 w-8"
+                            variant="ghost"
+                            onClick={() => removeItem(item.product.id)}
+                            className="text-red-600 hover:text-red-700 h-8 w-8"
                           >
-                            <Minus className="h-3 w-3" />
-                          </Button>
-                          <Input
-                            type="number"
-                            value={item.quantity}
-                            onChange={(e) => {
-                              const value = parseInt(e.target.value) || 1;
-                              handleQuantityChange(item.product.id, value);
-                            }}
-                            className="w-12 h-8 text-center text-sm"
-                            min="1"
-                          />
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
-                            className="h-8 w-8"
-                          >
-                            <Plus className="h-3 w-3" />
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
 
-                        {/* Item Total - Mobile */}
-                        <div className="text-right">
-                          <p className="text-sm font-medium text-gray-900">
-                            {formatVND(item.product.sale_price * item.quantity)}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Desktop Layout - Hidden on mobile */}
-                      <div className="hidden sm:flex sm:items-center sm:space-x-4 sm:w-full">
-                        {/* Product Image */}
-                        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden relative">
-                          <ProductImage
-                            src={getProductImageUrl(item.product)}
-                            alt={item.product.name}
-                            width={64}
-                            height={64}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
-                          {/* Product Status Badge */}
-                          {item.product.product_status?.name && (
-                            <Badge
-                              variant={
-                                item.product.product_status.name === 'Còn hàng'
-                                  ? 'default'
-                                  : item.product.product_status.name === 'Hết hàng'
-                                  ? 'destructive'
-                                  : 'secondary'
-                              }
-                              className="absolute top-1 left-1 text-xs px-1 py-0.5 rounded-full shadow-md z-10"
+                        {/* Mobile Quantity and Total */}
+                        <div className="flex items-center justify-between sm:hidden">
+                          {/* Quantity Controls - Mobile */}
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
+                              disabled={item.quantity <= 1}
+                              className="h-8 w-8"
                             >
-                              {item.product.product_status.name}
-                            </Badge>
-                          )}
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <Input
+                              type="number"
+                              value={item.quantity}
+                              onChange={(e) => {
+                                const value = parseInt(e.target.value) || 1;
+                                handleQuantityChange(item.product.id, value);
+                              }}
+                              className="w-12 h-8 text-center text-sm"
+                              min="1"
+                            />
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
+                              className="h-8 w-8"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+
+                          {/* Item Total - Mobile */}
+                            <div className="text-right flex flex-col items-end">
+                              <span className="text-xs text-gray-500">Thành tiền:</span>
+                              <p className="text-sm font-medium text-gray-900">
+                                {formatVND(item.product.sale_price * item.quantity)}
+                              </p>
+                            </div>
                         </div>
 
-                        {/* Product Details */}
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-medium text-gray-900 truncate">
-                            {item.product.name}
-                          </h3>
-                          {/* <p className="text-sm text-gray-500">
-                            {item.product.category?.name}
-                          </p> */}
-                          <p className="text-sm font-medium text-blue-600">
-                            {formatVND(item.product.sale_price)}
-                          </p>
-                        </div>
+                        {/* Desktop Layout - mirror mobile: first row image + name + unit price + remove; second row quantity + Thành tiền */}
+                        <div className="hidden sm:flex sm:flex-col sm:gap-2 sm:w-full">
+                          {/* Row 1: Image + Name + Unit Price + Remove */}
+                          <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden relative">
+                              <ProductImage
+                                src={getProductImageUrl(item.product)}
+                                alt={item.product.name}
+                                width={64}
+                                height={64}
+                                className="w-full h-full object-cover rounded-lg"
+                              />
+                              {item.product.product_status?.name && (
+                                <Badge
+                                  variant={
+                                    item.product.product_status.name === 'Còn hàng'
+                                      ? 'default'
+                                      : item.product.product_status.name === 'Hết hàng'
+                                      ? 'destructive'
+                                      : 'secondary'
+                                  }
+                                  className="absolute top-1 left-1 text-xs px-1 py-0.5 rounded-full shadow-md z-10"
+                                >
+                                  {item.product.product_status.name}
+                                </Badge>
+                              )}
+                            </div>
 
-                        {/* Quantity Controls */}
-                        <div className="flex items-center space-x-2">
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
-                            disabled={item.quantity <= 1}
-                          >
-                            <Minus className="h-4 w-4" />
-                          </Button>
-                          <Input
-                            type="number"
-                            value={item.quantity}
-                            onChange={(e) => {
-                              const value = parseInt(e.target.value) || 1;
-                              handleQuantityChange(item.product.id, value);
-                            }}
-                            className="w-16 text-center"
-                            min="1"
-                          />
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                        </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-sm font-medium text-gray-900 whitespace-normal break-words">
+                                {item.product.name}
+                              </h3>
+                              <p className="text-sm text-blue-600 font-medium mt-1">{formatVND(item.product.sale_price)}</p>
+                            </div>
 
-                        {/* Item Total */}
-                        <div className="text-right">
-                          <p className="text-sm font-medium text-gray-900">
-                            {formatVND(item.product.sale_price * item.quantity)}
-                          </p>
-                        </div>
+                            <div>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => removeItem(item.product.id)}
+                                className="text-red-600 hover:text-red-700"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
 
-                        {/* Remove Button */}
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => removeItem(item.product.id)}
-                          className="text-red-600 hover:text-red-700"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                          {/* Row 2: Quantity controls and Thành tiền */}
+                          <div className="flex items-center justify-between text-sm">
+                            <div className="flex items-center space-x-2">
+                              <Button
+                                size="icon"
+                                variant="outline"
+                                onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
+                                disabled={item.quantity <= 1}
+                              >
+                                <Minus className="h-4 w-4" />
+                              </Button>
+                              <Input
+                                type="number"
+                                value={item.quantity}
+                                onChange={(e) => {
+                                  const value = parseInt(e.target.value) || 1;
+                                  handleQuantityChange(item.product.id, value);
+                                }}
+                                className="w-20 text-center"
+                                min="1"
+                              />
+                              <Button
+                                size="icon"
+                                variant="outline"
+                                onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+
+                            <div className="flex flex-col items-end">
+                              <span className="text-xs text-gray-500">Thành tiền:</span>
+                              <span className="text-gray-900 font-medium">{formatVND(item.product.sale_price * item.quantity)}</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               </CardContent>
