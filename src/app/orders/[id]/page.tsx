@@ -235,7 +235,7 @@ export default function OrderDetailPage() {
                               <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
                                 <ProductImage
                                   src={item.product ? getProductImageUrl(item.product) : null}
-                                  alt={item.product?.name || `Sản phẩm #${item.productId}`}
+                                  alt={item.product_name || `Sản phẩm #${item.productId}`}
                                   width={48}
                                   height={48}
                                   className="w-full h-full object-cover rounded-lg"
@@ -244,7 +244,7 @@ export default function OrderDetailPage() {
                               {/* Product Info */}
                               <div>
                                 <div className="font-medium">
-                                  {item.product?.name || `Sản phẩm #${item.productId}`}
+                                  {item.product_name || `Sản phẩm #${item.productId}`}
                                 </div>
                                 {item.product?.barcode && (
                                   <div className="text-sm text-gray-500 mt-1">
@@ -278,7 +278,7 @@ export default function OrderDetailPage() {
                         <div className="flex-shrink-0 w-16 h-16 bg-white rounded-lg border overflow-hidden">
                           <ProductImage
                             src={item.product ? getProductImageUrl(item.product) : null}
-                            alt={item.product?.name || `Sản phẩm #${item.productId}`}
+                            alt={item.product_name || `Sản phẩm #${item.productId}`}
                             width={64}
                             height={64}
                             className="w-full h-full object-cover rounded-lg"
@@ -287,7 +287,7 @@ export default function OrderDetailPage() {
                         {/* Product Info */}
                         <div className="flex-1 space-y-2">
                           <div className="font-medium text-sm">
-                            {item.product?.name || `Sản phẩm #${item.productId}`}
+                            {item.product_name || `Sản phẩm #${item.productId}`}
                           </div>
                           {item.product?.barcode && (
                             <div className="text-xs text-gray-500">

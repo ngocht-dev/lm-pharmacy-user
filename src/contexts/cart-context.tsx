@@ -7,6 +7,7 @@ interface CartContextType extends CartState {
   addItem: (product: Product, quantity?: number) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
+  updateProduct: (productId: string, product: Product) => void;
   clearCart: () => void;
   getItemQuantity: (productId: string) => number;
 }
@@ -15,6 +16,7 @@ type CartAction =
   | { type: 'ADD_ITEM'; payload: { product: Product; quantity: number } }
   | { type: 'REMOVE_ITEM'; payload: { productId: string } }
   | { type: 'UPDATE_QUANTITY'; payload: { productId: string; quantity: number } }
+  | { type: 'UPDATE_PRODUCT'; payload: { productId: string; product: Product } }
   | { type: 'CLEAR_CART' }
   | { type: 'LOAD_CART'; payload: { items: CartItem[] } };
 
@@ -65,6 +67,21 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       );
       
       const total = newItems.reduce((sum, item) => sum + (item.product.sale_price * item.quantity), 0);
+      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
+      
+      return { items: newItems, total, itemCount };
+    }
+    
+    case 'UPDATE_PRODUCT': {
+      const { productId, product } = action.payload;
+      
+      const newItems = state.items.map(item =>
+        item.product.id === productId
+          ? { ...item, product }
+          : item
+      );
+      
+      const total = newItems.reduce((sum, item) => sum + (product.sale_price * item.quantity), 0);
       const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
       
       return { items: newItems, total, itemCount };
@@ -129,6 +146,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'UPDATE_QUANTITY', payload: { productId, quantity } });
   };
 
+  const updateProduct = (productId: string, product: Product) => {
+    dispatch({ type: 'UPDATE_PRODUCT', payload: { productId, product } });
+  };
+
   const clearCart = () => {
     dispatch({ type: 'CLEAR_CART' });
   };
@@ -144,6 +165,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       addItem,
       removeItem,
       updateQuantity,
+      updateProduct,
       clearCart,
       getItemQuantity,
     }}>

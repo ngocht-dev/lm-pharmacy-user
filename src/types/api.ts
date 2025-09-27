@@ -124,6 +124,7 @@ export interface OrderItem {
   id?: string;
   productId: string;
   product?: Product;
+  product_name?: string; // Added for easier access to product name
   quantity: number;
   unit_price: number;
   total_price: number;

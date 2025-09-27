@@ -16,6 +16,7 @@ export const API_ENDPOINTS = {
   PRODUCTS: '/products',
   PRODUCTS_ALL: '/products/all',
   PRODUCTS_SEARCH: '/products',
+  PRODUCTS_BATCH: '/products/batch',
   
   // Categories
   CATEGORIES: '/categories',

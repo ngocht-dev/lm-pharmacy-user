@@ -7,20 +7,24 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useCart } from '@/contexts/cart-context';
 import { useAuth } from '@/contexts/auth-context';
-import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { Trash2, Minus, Plus, ShoppingBag, RefreshCw } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatVND } from '@/lib/utils/currency';
 import { getProductImageUrl } from '@/lib/utils/product';
 import { ProductImage } from '@/components/ui/product-image';
+import { productService } from '@/lib/services/products';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import type { Product } from '@/types/api';
 
 export default function CartPage() {
-  const { items, total, updateQuantity, removeItem, clearCart } = useCart();
+  const { items, total, updateQuantity, removeItem, clearCart, updateProduct } = useCart();
   const { isAuthenticated } = useAuth();
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
 
-  console.log('Cart items:', items[0]);
   const handleQuantityChange = (productId: string, newQuantity: number) => {
     if (newQuantity > 0) {
       updateQuantity(productId, newQuantity);
@@ -33,6 +37,52 @@ export default function CartPage() {
       return;
     }
     router.push('/checkout');
+  };
+
+  const handleRefreshProducts = async () => {
+    if (items.length === 0) return;
+    
+    setRefreshing(true);
+    try {
+      // Get all product IDs from cart items
+      const productIds = items.map(item => item.product.id);
+      console.log('Refreshing products with IDs:', productIds);
+      
+      // Fetch all products in a single batch request
+      const response = await productService.getProductsByIds(productIds);
+      console.log('Batch API response:', response);
+      
+      if (response.success && response.data) {
+        let updatedCount = 0;
+        let errorCount = 0;
+        
+        // Update each product in the cart
+        response.data.forEach((product) => {
+          try {
+            updateProduct(product.id, product);
+            updatedCount++;
+          } catch (error) {
+            console.error(`Failed to update product ${product.id}:`, error);
+            errorCount++;
+          }
+        });
+        
+        if (updatedCount > 0) {
+          toast.success(`Đã cập nhật ${updatedCount} sản phẩm`);
+        }
+        if (errorCount > 0) {
+          toast.warning(`Không thể cập nhật ${errorCount} sản phẩm`);
+        }
+      } else {
+        console.error('Batch API failed:', response);
+        toast.error(`Không thể tải thông tin sản phẩm: ${response.error || 'Lỗi không xác định'}`);
+      }
+    } catch (error) {
+      console.error('Failed to refresh products:', error);
+      toast.error(`Có lỗi xảy ra khi cập nhật sản phẩm: ${error instanceof Error ? error.message : 'Lỗi không xác định'}`);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   if (items.length === 0) {
@@ -73,14 +123,26 @@ export default function CartPage() {
               <CardHeader>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
                   <CardTitle className="text-base sm:text-lg">Sản Phẩm Trong Giỏ ({items.length})</CardTitle>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={clearCart}
-                    className="text-red-600 hover:text-red-700 text-xs sm:text-sm self-start sm:self-auto"
-                  >
-                    Xóa Giỏ Hàng
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleRefreshProducts}
+                      disabled={refreshing || items.length === 0}
+                      className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm"
+                    >
+                      <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
+                      {refreshing ? 'Đang cập nhật...' : 'Cập Nhật Giá'}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={clearCart}
+                      className="text-red-600 hover:text-red-700 text-xs sm:text-sm"
+                    >
+                      Xóa Giỏ Hàng
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>

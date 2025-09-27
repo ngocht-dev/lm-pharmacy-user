@@ -29,6 +29,16 @@ export const productService = {
     return apiClient.get<Product>(`${API_ENDPOINTS.PRODUCTS}/${id}`);
   },
 
+  // Get multiple products by IDs (batch)
+  async getProductsByIds(ids: string[]): Promise<ApiResponse<Product[]>> {
+    if (ids.length === 0) {
+      return { success: true, data: [], message: 'No products requested' };
+    }
+    
+    const params = ids.map(id => `product_ids=${encodeURIComponent(id)}`).join('&');
+    return apiClient.get<Product[]>(`${API_ENDPOINTS.PRODUCTS_BATCH}?${params}`);
+  },
+
   // Get all categories
   async getCategories(): Promise<ApiResponse<Category[]>> {
     return apiClient.get<Category[]>(API_ENDPOINTS.CATEGORIES);
