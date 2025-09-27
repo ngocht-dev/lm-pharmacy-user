@@ -15,6 +15,7 @@ import {
     SelectValue
 } from '@/components/ui/select';
 import { useCart } from '@/contexts/cart-context';
+import { productService } from '@/lib/services/products';
 import { useAuth } from '@/contexts/auth-context';
 import { orderService } from '@/lib/services/orders';
 import { CustomerType, SaleMethod, CreateOrderDto } from '@/types/api';
@@ -26,7 +27,7 @@ import Image from 'next/image';
 import { toast } from 'sonner';
 
 export default function CheckoutPage() {
-    const { items, total, clearCart } = useCart();
+    const { items, total, clearCart, updateProduct } = useCart();
     const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
     const router = useRouter();
 
@@ -37,6 +38,7 @@ export default function CheckoutPage() {
     const [saleMethod, setSaleMethod] = useState<SaleMethod>(SaleMethod.CASH);
     const [discount, setDiscount] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
     const [orderCreated, setOrderCreated] = useState(false);
     const [orderId, setOrderId] = useState('');
 
@@ -51,6 +53,9 @@ export default function CheckoutPage() {
     useEffect(() => {
         if (!isAuthLoading && user && items.length === 0) {
             router.push('/cart');
+        }
+        if (!isAuthLoading && user && items.length > 0) {
+            handleRefreshProducts();
         }
     }, [isAuthLoading, user, items.length, router]);
 
@@ -136,6 +141,53 @@ export default function CheckoutPage() {
         }
     };
 
+    const handleRefreshProducts = async () => {
+        console.log('Starting product refresh...', items.length);
+        if (items.length === 0) return;
+
+        setRefreshing(true);
+        try {
+            // Get all product IDs from cart items
+            const productIds = items.map(item => item.product.id);
+            console.log('Refreshing products with IDs:', productIds);
+
+            // Fetch all products in a single batch request
+            const response = await productService.getProductsByIds(productIds);
+            console.log('Batch API response:', response);
+
+            if (response.success && response.data) {
+                let updatedCount = 0;
+                let errorCount = 0;
+
+                // Update each product in the cart
+                response.data.forEach((product) => {
+                    try {
+                        updateProduct(product.id, product);
+                        updatedCount++;
+                    } catch (error) {
+                        console.error(`Failed to update product ${product.id}:`, error);
+                        errorCount++;
+                    }
+                });
+
+                if (updatedCount > 0) {
+                    toast.success(`Đã cập nhật ${updatedCount} sản phẩm`);
+                }
+                if (errorCount > 0) {
+                    toast.warning(`Không thể cập nhật ${errorCount} sản phẩm`);
+                }
+            } else {
+                console.error('Batch API failed:', response);
+                toast.error(`Không thể tải thông tin sản phẩm: ${response.error || 'Lỗi không xác định'}`);
+            }
+        } catch (error) {
+            console.error('Failed to refresh products:', error);
+            toast.error(`Có lỗi xảy ra khi cập nhật sản phẩm: ${error instanceof Error ? error.message : 'Lỗi không xác định'}`);
+        } finally {
+            setRefreshing(false);
+        }
+    };
+
     if (orderCreated) {
         return (
             <div className="min-h-screen bg-gray-50">
@@ -182,10 +234,23 @@ export default function CheckoutPage() {
                             {/* Products Card */}
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                                        <Package className="h-4 w-4 sm:h-5 sm:w-5" />
-                                        Sản Phẩm Đã Chọn ({items.length})
-                                    </CardTitle>
+                                    <div className="flex items-center justify-between w-full">
+                                        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                                            <Package className="h-4 w-4 sm:h-5 sm:w-5" />
+                                            Sản Phẩm Đã Chọn ({items.length})
+                                        </CardTitle>
+                                        <div>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={handleRefreshProducts}
+                                                disabled={refreshing || items.length === 0}
+                                                className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm"
+                                            >
+                                                {refreshing ? 'Đang cập nhật...' : 'Cập Nhật Giá'}
+                                            </Button>
+                                        </div>
+                                    </div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-3 sm:space-y-4">
@@ -212,13 +277,13 @@ export default function CheckoutPage() {
                                                             </div> */}
                                                         </div>
                                                     </div>
-                                                    
+
                                                     {/* Quantity and Unit Price */}
                                                     <div className="flex justify-between items-center text-sm">
                                                         <span>Số lượng: {item.quantity}</span>
                                                         <span className="text-blue-600">{formatVND(item.product.sale_price)}</span>
                                                     </div>
-                                                    
+
                                                     {/* Total Price */}
                                                     <div className="flex justify-between items-center font-medium">
                                                         <span>Thành tiền:</span>

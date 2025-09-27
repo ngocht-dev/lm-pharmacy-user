@@ -215,58 +215,43 @@ export default function OrderDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {/* Desktop Table View */}
-                <div className="hidden sm:block">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Sản phẩm</TableHead>
-                        <TableHead className="text-center">Số lượng</TableHead>
-                        <TableHead className="text-right">Đơn giá</TableHead>
-                        <TableHead className="text-right">Thành tiền</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {order.items.map((item, index) => (
-                        <TableRow key={index}>
-                          <TableCell>
-                            <div className="flex items-center gap-3">
-                              {/* Product Image */}
-                              <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
-                                <ProductImage
-                                  src={item.product ? getProductImageUrl(item.product) : null}
-                                  alt={item.product_name || `Sản phẩm #${item.productId}`}
-                                  width={48}
-                                  height={48}
-                                  className="w-full h-full object-cover rounded-lg"
-                                />
-                              </div>
-                              {/* Product Info */}
-                              <div>
-                                <div className="font-medium">
-                                  {item.product_name || `Sản phẩm #${item.productId}`}
-                                </div>
-                                {item.product?.barcode && (
-                                  <div className="text-sm text-gray-500 mt-1">
-                                    Mã vạch: {item.product.barcode}
-                                  </div>
-                                )}
-                              </div>
+                {/* Desktop Card View (mirror mobile) */}
+                <div className="hidden sm:block space-y-4">
+                  {order.items.map((item, index) => (
+                    <Card key={index} className="p-4 bg-gray-50">
+                      <div className="flex items-start gap-3">
+                        {/* Product Image */}
+                        <div className="flex-shrink-0 w-16 h-16 bg-white rounded-lg border overflow-hidden">
+                          <ProductImage
+                            src={item.product ? getProductImageUrl(item.product) : null}
+                            alt={item.product_name || `Sản phẩm #${item.productId}`}
+                            width={64}
+                            height={64}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        </div>
+                        {/* Product Info */}
+                        <div className="flex-1 space-y-2">
+                          <div className="font-medium text-sm">
+                            {item.product_name || `Sản phẩm #${item.productId}`}
+                          </div>
+                          {item.product?.barcode && (
+                            <div className="text-xs text-gray-500">
+                              Mã vạch: {item.product.barcode}
                             </div>
-                          </TableCell>
-                          <TableCell className="text-center">
-                            {item.quantity}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {formatVND(item.unit_price)}
-                          </TableCell>
-                          <TableCell className="text-right font-medium">
-                            {formatVND(item.total_price)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                          )}
+                          <div className="flex justify-between items-center text-sm">
+                            <span>Số lượng: {item.quantity}</span>
+                            <span>{formatVND(item.unit_price)}</span>
+                          </div>
+                          <div className="flex justify-between items-center font-medium">
+                            <span>Thành tiền:</span>
+                            <span>{formatVND(item.total_price)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
                 </div>
 
                 {/* Mobile Card View */}
