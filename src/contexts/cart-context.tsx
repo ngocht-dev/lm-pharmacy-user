@@ -74,17 +74,17 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     
     case 'UPDATE_PRODUCT': {
       const { productId, product } = action.payload;
-      
-      const newItems = state.items.map(item =>
-        item.product.id === productId
-          ? { ...item, product }
-          : item
-      );
-      
-      const total = newItems.reduce((sum, item) => sum + (product.sale_price * item.quantity), 0);
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
-      
-      return { items: newItems, total, itemCount };
+        // Compare IDs as strings to tolerate numeric vs string IDs from API
+        const newItems = state.items.map(item =>
+          String(item.product.id) === String(productId)
+            ? { ...item, product }
+            : item
+        );
+
+        const total = newItems.reduce((sum, item) => sum + (item.product.sale_price * item.quantity), 0);
+        const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
+
+        return { items: newItems, total, itemCount };
     }
     
     case 'CLEAR_CART':
