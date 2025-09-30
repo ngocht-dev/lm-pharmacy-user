@@ -27,7 +27,7 @@ import Image from 'next/image';
 import { toast } from 'sonner';
 
 export default function CheckoutPage() {
-    const { items, total, clearCart, updateProduct } = useCart();
+    const { items, total, clearCart, updateProduct, removeItem } = useCart();
     const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
     const router = useRouter();
 
@@ -157,7 +157,10 @@ export default function CheckoutPage() {
 
             if (response.success && response.data) {
                 let updatedCount = 0;
-                let errorCount = 0;
+                let removedCount = 0;
+
+                // Get IDs of products that were successfully fetched
+                const fetchedIds = response.data.map(product => String(product.id));
 
                 // Update each product in the cart
                 response.data.forEach((product) => {
@@ -166,19 +169,62 @@ export default function CheckoutPage() {
                         updatedCount++;
                     } catch (error) {
                         console.error(`Failed to update product ${product.id}:`, error);
-                        errorCount++;
+                    }
+                });
+
+                // Remove products that were not found in the API response
+                productIds.forEach((id) => {
+                    if (!fetchedIds.includes(String(id))) {
+                        try {
+                            removeItem(id);
+                            removedCount++;
+                        } catch (error) {
+                            console.error(`Failed to remove product ${id}:`, error);
+                        }
                     }
                 });
 
                 if (updatedCount > 0) {
                     toast.success(`Đã cập nhật ${updatedCount} sản phẩm`);
                 }
-                if (errorCount > 0) {
-                    toast.warning(`Không thể cập nhật ${errorCount} sản phẩm`);
+                if (removedCount > 0) {
+                    toast.warning(`Đã xóa ${removedCount} sản phẩm không còn tồn tại`);
                 }
             } else {
                 console.error('Batch API failed:', response);
-                toast.error(`Không thể tải thông tin sản phẩm: ${response.error || 'Lỗi không xác định'}`);
+                // Fallback: try fetching individually
+                try {
+                    const individual = await Promise.all(productIds.map(id => productService.getProductById(id)));
+                    let updatedCountFallback = 0;
+                    let removedCountFallback = 0;
+
+                    individual.forEach((res, index) => {
+                        const productId = productIds[index];
+                        if (res.success && res.data) {
+                            try {
+                                updateProduct(res.data.id, res.data);
+                                updatedCountFallback++;
+                            } catch (e) {
+                                console.error('Failed to update product from fallback:', e);
+                                removedCountFallback++;
+                                removeItem(productId);
+                            }
+                        } else {
+                            removedCountFallback++;
+                            removeItem(productId);
+                        }
+                    });
+
+                    if (updatedCountFallback > 0) {
+                        toast.success(`Đã cập nhật ${updatedCountFallback} sản phẩm (fallback)`);
+                    }
+                    if (removedCountFallback > 0) {
+                        toast.warning(`Đã xóa ${removedCountFallback} sản phẩm không còn tồn tại (fallback)`);
+                    }
+                } catch (fallbackError) {
+                    console.error('Fallback individual requests failed:', fallbackError);
+                    toast.error('Không thể tải thông tin sản phẩm');
+                }
             }
         } catch (error) {
             console.error('Failed to refresh products:', error);
